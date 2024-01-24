@@ -24,11 +24,11 @@ export class User {
   @Prop({ required: true })
   courierVehicle: string;
   @Prop({ required: true })
-  carAdvertising: boolean;
+  carAdvertising: string;
   @Prop({ required: true })
   courierAccessories: string;
   @Prop({ required: true })
-  profilePhoto: string;
+  profilePhoto: string[];
   @Prop({ required: true })
   driverLicensePhoto: string[];
   @Prop({ required: true })
