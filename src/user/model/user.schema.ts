@@ -7,7 +7,7 @@ export class User {
   email: string;
   @Prop({ required: true })
   fleetName: string;
-  @Prop({ required: true })
+  @Prop({ required: true, ref: 'subfleetname' })
   subFleetName: mongoose.Schema.Types.ObjectId; // altFleet-in adi (wolt-a getmesin, select-box olacaq, admin panel-de hemin alt-fleet-leri elave etmek olsun, analitika da olsun, hansi kuryerleri elave edib ve s., 5 gun active olmayan kuryer-lerde avtomatik mesaj gelsin)
   @Prop({ required: true })
   username: string; // Kuryerin istifadeci adi. Ad,soyadindan avtomatik generasiya edilecek. Eli Eliyev (eeliyev) Namiq Quiliyev (nquliyev) Ali Isiyev (aisiyev) Namiq Quliyev (nquliyev2)
@@ -39,7 +39,7 @@ export class User {
   password: string;
   @Prop({ required: true })
   note: string;
-  @Prop({default:"user", required: true })
+  @Prop({ default: "user", required: true })
   role: string;
 }
 

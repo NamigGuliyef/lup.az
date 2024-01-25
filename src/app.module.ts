@@ -11,9 +11,10 @@ import {
 import { UserController } from './user/user.controller';
 import { UserModule } from './user/user.module';
 import { AdminController } from './admin/admin.controller';
+import { AdminModule } from './admin/admin.module';
 
 @Module({
-  imports: [AuthModule, UserModule, MongooseModule.forRoot(uri)],
+  imports: [AuthModule, UserModule, MongooseModule.forRoot(uri), AdminModule],
   controllers: [AppController],
   providers: [AppService],
 })
