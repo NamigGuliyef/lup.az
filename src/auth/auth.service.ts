@@ -6,7 +6,8 @@ import cloudinary from 'src/config/cloudinary';
 import { comparePassword, hashPassword } from 'src/helpers/hash_compare';
 import { CreateUserDto } from 'src/user/dto/user.dto';
 import { User } from 'src/user/model/user.schema';
-
+import { sign } from 'jsonwebtoken'
+import { jwtSecret } from 'src/config/jsonwebtoken';
 
 @Injectable()
 export class AuthService {
@@ -57,7 +58,9 @@ export class AuthService {
     const userEmailExist = await this.userModel.findOne({ email: userSign.email })
     if (!userEmailExist) throw new HttpException('Email is wrong', HttpStatus.BAD_REQUEST)
     const passwordRight = await comparePassword(userSign.password, userEmailExist.password)
-    if(!passwordRight) throw new HttpException()
+    if(!passwordRight) throw new HttpException('Password is wrong',HttpStatus.UNAUTHORIZED)
+    const token = sign({ _id:userEmailExist._id, email:userEmailExist.email , role: userEmailExist.role},jwtSecret)
+    return {token,message:'You are successfully logged in.',role:userEmailExist.role}
   }
 
 }

@@ -3,7 +3,7 @@ import { FileFieldsInterceptor } from '@nestjs/platform-express'
 import { MulterOptions } from 'src/config/multer';
 import { CreateUserDto } from 'src/user/dto/user.dto';
 import { AuthService } from './auth.service';
-import { userSignUpResponse } from './auth.type';
+import { UserSignIn, tokenResponse, userSignUpResponse } from './auth.type';
 
 @Controller('auth')
 export class AuthController {
@@ -18,4 +18,11 @@ export class AuthController {
     return await this.authService.signUp(createUserDto, files)
   }
 
+  // courier registration sign in
+  @Post('/sign-in')
+  @HttpCode(HttpStatus.OK)
+  @UsePipes(new ValidationPipe())
+  async signIn(@Body() userSignIn:UserSignIn):Promise<tokenResponse>{
+    return await this.authService.signIn(userSignIn)
+  }
 }

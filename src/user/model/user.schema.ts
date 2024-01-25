@@ -39,6 +39,8 @@ export class User {
   password: string;
   @Prop({ required: true })
   note: string;
+  @Prop({default:"user", required: true })
+  role: string;
 }
 
 export const userModel = SchemaFactory.createForClass(User)
