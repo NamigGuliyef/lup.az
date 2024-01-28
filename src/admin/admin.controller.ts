@@ -1,10 +1,11 @@
-import { Body, Controller, Delete, HttpCode, HttpStatus, Param, Post, UsePipes, ValidationPipe } from '@nestjs/common';
-import { CreateSubFleetNameDto } from 'src/subfleetname/dto/subfleetname.dto';
+import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Patch, Post, UsePipes, ValidationPipe } from '@nestjs/common';
+import { CreateSubFleetNameDto, UpdateSubFleetNameDto } from 'src/subfleetname/dto/subfleetname.dto';
 import { subFleetName } from 'src/subfleetname/schema/subfleetname.schema';
 import { AdminService } from './admin.service';
 import { messageResponse } from './admin.types';
-import { CreateNotificationCategoryDto } from 'src/notification-category/dto/notificationCategory.dto';
+import { CreateNotificationCategoryDto, UpdateNotificationCategoryDto } from 'src/notification-category/dto/notificationCategory.dto';
 import { NotificationCategory } from 'src/notification-category/model/notificationCategory.schema';
+import { CreateNotificationDto } from 'src/notification/dto/notification.dto';
 
 @Controller('admin')
 export class AdminController {
@@ -21,22 +22,59 @@ export class AdminController {
   // delete sub fleet name
   @Delete('/dashboard/subfleetname/:_id')
   @HttpCode(HttpStatus.OK)
-  async deleteSubFleetName(@Param('_id') _id:string):Promise<messageResponse>{
+  async deleteSubFleetName(@Param('_id') _id: string): Promise<messageResponse> {
     return await this.adminService.deleteSubFleetName(_id)
+  }
+
+  // update sub fleet name
+  @Patch('/dashboard/subfleetname/:_id')
+  @UsePipes(new ValidationPipe())
+  @HttpCode(HttpStatus.OK)
+  async updateSubFleetName(@Param('_id') _id: string, @Body() updateSubFleetNameDto: UpdateSubFleetNameDto): Promise<subFleetName> {
+    return await this.adminService.updateSubFleetName(_id, updateSubFleetNameDto)
+  }
+
+  // get all sub fleet name
+  @Get('/dashboard/subfleetname')
+  @HttpCode(HttpStatus.OK)
+  async getAllSubFleetName(): Promise<subFleetName[]> {
+    return await this.adminService.getAllSubFleetName()
   }
 
   // create notification category
   @Post('/dashboard/notification-category')
   @HttpCode(HttpStatus.CREATED)
-  async createNotificationCategory(@Body() createNotificationCategoryDto:CreateNotificationCategoryDto):Promise<NotificationCategory>{
+  async createNotificationCategory(@Body() createNotificationCategoryDto: CreateNotificationCategoryDto): Promise<NotificationCategory> {
     return await this.adminService.createNotificationCategory(createNotificationCategoryDto)
   }
 
   // delete notification category
   @Delete('dashboard/notification-category/:_id')
   @HttpCode(HttpStatus.OK)
-  async deleteNotificationCategory(@Param('_id') _id:string):Promise<messageResponse>{
+  async deleteNotificationCategory(@Param('_id') _id: string): Promise<messageResponse> {
     return await this.adminService.deleteNotificationCategory(_id)
   }
 
+  // notification category update
+  @Patch('/dashboard/notification-category/:_id')
+  @HttpCode(HttpStatus.OK)
+  @UsePipes(new ValidationPipe())
+  async updateNotificationCategory(@Param('_id') _id: string, @Body() updateNotificationCategoryDto: UpdateNotificationCategoryDto): Promise<NotificationCategory> {
+    return await this.adminService.updateNotificationCategory(_id, updateNotificationCategoryDto)
+  }
+
+  // get all notification category
+  @Get('/dashboard/notification-category')
+  @HttpCode(HttpStatus.OK)
+  async getAllNotificationCategory(): Promise<NotificationCategory[]> {
+    return await this.adminService.getAllNotificationCategory()
+  }
+
+
+  @Post('/dashboard/send-notification')
+  @HttpCode(HttpStatus.CREATED)
+  @UsePipes(new ValidationPipe())
+  async sendNotification(@Body() createNotificationDto:CreateNotificationDto):Promise<messageResponse>{
+    return await this.adminService.sendNotification(createNotificationDto)
+  }
 }

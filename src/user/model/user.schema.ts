@@ -1,5 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import mongoose, { Types } from 'mongoose';
+import mongoose from 'mongoose';
 
 @Schema({ versionKey: false, timestamps: true })
 export class User {
@@ -39,8 +39,8 @@ export class User {
   password: string;
   @Prop({ required: true })
   note: string;
-  @Prop({ type: [mongoose.Schema.Types.ObjectId], ref: 'notification' })
-  notifications: Types.ObjectId;
+  @Prop({ required: true, ref: 'notification' })
+  notifications: [mongoose.Schema.Types.ObjectId];
   @Prop({ default: 'user', required: true })
   role: string;
 }

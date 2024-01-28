@@ -5,3 +5,10 @@ export class CreateNotificationCategoryDto {
   @IsString()
   name: string;
 }
+
+
+export class UpdateNotificationCategoryDto {
+  @IsNotEmpty({ message: 'Name is empty' })
+  @IsString()
+  name: string;
+}

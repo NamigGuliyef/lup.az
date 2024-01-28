@@ -6,3 +6,11 @@ export class CreateSubFleetNameDto {
   @Matches(new RegExp("^[a-zA-Z]{3,20}$"))
   name: string
 }
+
+
+export class UpdateSubFleetNameDto {
+  @IsNotEmpty({ message: 'Name is empty' })
+  @IsString()
+  @Matches(new RegExp("^[a-zA-Z]{3,20}$"))
+  name: string
+}
