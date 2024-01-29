@@ -88,4 +88,10 @@ export class AdminService {
   }
 
 
+  // all support message
+  async getAllSupportMessage():Promise<Notification[]>{
+    return await this.notificationModel.find({ type:'support' }).populate([{ path:'user', select:['courierName','courierSurname','courierFatherName','courierPhone']},{ path:'category' }])
+  }
+
+
 }

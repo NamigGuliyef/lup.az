@@ -1,11 +1,12 @@
 import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Patch, Post, UsePipes, ValidationPipe } from '@nestjs/common';
+import { CreateNotificationCategoryDto, UpdateNotificationCategoryDto } from 'src/notification-category/dto/notificationCategory.dto';
+import { NotificationCategory } from 'src/notification-category/model/notificationCategory.schema';
+import { CreateNotificationDto } from 'src/notification/dto/notification.dto';
+import { Notification } from 'src/notification/model/notification.schema';
 import { CreateSubFleetNameDto, UpdateSubFleetNameDto } from 'src/subfleetname/dto/subfleetname.dto';
 import { subFleetName } from 'src/subfleetname/schema/subfleetname.schema';
 import { AdminService } from './admin.service';
 import { messageResponse } from './admin.types';
-import { CreateNotificationCategoryDto, UpdateNotificationCategoryDto } from 'src/notification-category/dto/notificationCategory.dto';
-import { NotificationCategory } from 'src/notification-category/model/notificationCategory.schema';
-import { CreateNotificationDto } from 'src/notification/dto/notification.dto';
 
 @Controller('admin')
 export class AdminController {
@@ -70,11 +71,18 @@ export class AdminController {
     return await this.adminService.getAllNotificationCategory()
   }
 
-
+  // send notification
   @Post('/dashboard/send-notification')
   @HttpCode(HttpStatus.CREATED)
   @UsePipes(new ValidationPipe())
   async sendNotification(@Body() createNotificationDto:CreateNotificationDto):Promise<messageResponse>{
     return await this.adminService.sendNotification(createNotificationDto)
+  }
+
+    // all support message
+  @Get('/dashboard/support')
+  @HttpCode(HttpStatus.OK)
+  async getAllSupportMessage():Promise<Notification[]>{
+    return await this.adminService.getAllSupportMessage()
   }
 }

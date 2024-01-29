@@ -5,6 +5,8 @@ import mongoose, { Types } from 'mongoose';
 export class Notification {
   @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'notificationCategory' })
   category: Types.ObjectId;
+  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'user' })
+  user: Types.ObjectId;
   @Prop({ required: true })
   message: string;
   @Prop({ required: true })

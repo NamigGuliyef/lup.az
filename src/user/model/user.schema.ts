@@ -43,6 +43,7 @@ export class User {
   notifications: [mongoose.Schema.Types.ObjectId];
   @Prop({ default: 'user', required: true })
   role: string;
+  _id: any;
 }
 
 export const userModel = SchemaFactory.createForClass(User);

@@ -7,3 +7,10 @@ export class CreateNotificationDto {
   @IsNotEmpty()
   message: string;
 }
+
+export class CreateSupportDto {
+  @IsNotEmpty()
+  category: mongoose.Schema.Types.ObjectId;
+  @IsNotEmpty()
+  message: string;
+}
