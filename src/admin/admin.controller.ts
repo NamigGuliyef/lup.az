@@ -5,6 +5,7 @@ import { CreateNotificationDto } from 'src/notification/dto/notification.dto';
 import { Notification } from 'src/notification/model/notification.schema';
 import { CreateSubFleetNameDto, UpdateSubFleetNameDto } from 'src/subfleetname/dto/subfleetname.dto';
 import { subFleetName } from 'src/subfleetname/schema/subfleetname.schema';
+import { User } from 'src/user/model/user.schema';
 import { AdminService } from './admin.service';
 import { messageResponse } from './admin.types';
 
@@ -75,14 +76,21 @@ export class AdminController {
   @Post('/dashboard/send-notification')
   @HttpCode(HttpStatus.CREATED)
   @UsePipes(new ValidationPipe())
-  async sendNotification(@Body() createNotificationDto:CreateNotificationDto):Promise<messageResponse>{
+  async sendNotification(@Body() createNotificationDto: CreateNotificationDto): Promise<messageResponse> {
     return await this.adminService.sendNotification(createNotificationDto)
   }
 
-    // all support message
+  // all support message
   @Get('/dashboard/support')
   @HttpCode(HttpStatus.OK)
-  async getAllSupportMessage():Promise<Notification[]>{
+  async getAllSupportMessage(): Promise<Notification[]> {
     return await this.adminService.getAllSupportMessage()
+  }
+
+  // all user about information
+  @Get('/dashboard/user-info')
+  @HttpCode(HttpStatus.OK)
+  async getAllUserInformation(): Promise<User[]> {
+    return await this.adminService.getAllUserInformation()
   }
 }

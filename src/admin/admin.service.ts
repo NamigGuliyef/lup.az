@@ -1,6 +1,6 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import mongoose, { Model, Types } from 'mongoose';
+import { Model } from 'mongoose';
 import { CreateNotificationCategoryDto, UpdateNotificationCategoryDto } from 'src/notification-category/dto/notificationCategory.dto';
 import { NotificationCategory } from 'src/notification-category/model/notificationCategory.schema';
 import { CreateNotificationDto } from 'src/notification/dto/notification.dto';
@@ -89,8 +89,13 @@ export class AdminService {
 
 
   // all support message
-  async getAllSupportMessage():Promise<Notification[]>{
-    return await this.notificationModel.find({ type:'support' }).populate([{ path:'user', select:['courierName','courierSurname','courierFatherName','courierPhone']},{ path:'category' }])
+  async getAllSupportMessage(): Promise<Notification[]> {
+    return await this.notificationModel.find({ type: 'support' }).populate([{ path: 'user', select: ['courierName', 'courierSurname', 'courierFatherName', 'courierPhone'] }, { path: 'category' }])
+  }
+
+  // all user about information
+  async getAllUserInformation(): Promise<User[]> {
+    return await this.userModel.find().select(['username', 'courierName', 'courierSurname', 'email'])
   }
 
 

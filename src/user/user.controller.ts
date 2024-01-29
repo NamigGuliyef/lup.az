@@ -6,15 +6,22 @@ import {
   HttpStatus,
   Post,
   UsePipes,
-  ValidationPipe,
+  ValidationPipe
 } from '@nestjs/common';
+import { CreateSupportDto } from 'src/notification/dto/notification.dto';
 import { User } from './model/user.schema';
 import { UserService } from './user.service';
-import { CreateNotificationDto, CreateSupportDto } from 'src/notification/dto/notification.dto';
 
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
+
+
+
+
+
+
+
 
   // user profile info
   @Get('/profile/info')
