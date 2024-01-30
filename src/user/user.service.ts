@@ -8,6 +8,7 @@ import { tokenRequestType } from 'src/middleware/tokenReqType';
 import { CreateSupportDto } from 'src/notification/dto/notification.dto';
 import { UpdateUserDto } from './dto/user.dto';
 import { User } from './model/user.schema';
+import { comparePassword } from 'src/helpers/hash_compare';
 
 
 @Injectable()
@@ -18,9 +19,20 @@ export class UserService {
 
 
   // user update profile
-  async updateProfile(_id: string, updateUserDto: UpdateUserDto, files: { profilePhoto: Express.Multer.File[], driverLicensePhoto: Express.Multer.File[], carTechnicalPassportPhoto: Express.Multer.File[] }): Promise<messageResponse> {
-    const userExist = await this.userModel.findById(_id)
+  async updateProfile(updateUserDto: UpdateUserDto, files: { profilePhoto: Express.Multer.File[], driverLicensePhoto: Express.Multer.File[], carTechnicalPassportPhoto: Express.Multer.File[] }): Promise<messageResponse> {
+    const userExist = await this.userModel.findById({_id:this.req.user._id})
     if (!userExist) throw new HttpException('User not found', HttpStatus.NOT_FOUND)
+    
+    // əgər parol dəyişirsə
+    if(updateUserDto.old_password){
+      const passRight=await comparePassword(updateUserDto.old_password,userExist.password)
+      if(!passRight) throw new HttpException('Pssword is wrong',HttpStatus.UNAUTHORIZED)
+
+
+    }
+
+
+
     if ((files.profilePhoto && files.profilePhoto[0] && files.profilePhoto[0].path) || (files.driverLicensePhoto && files.driverLicensePhoto[0] && files.driverLicensePhoto[0].path) || (files.carTechnicalPassportPhoto && files.carTechnicalPassportPhoto[0] && files.carTechnicalPassportPhoto[0].path)) {
       let profilePhoto = []
       let driverLicensePhoto = []
@@ -55,6 +67,9 @@ export class UserService {
         }
         await this.userModel.findByIdAndUpdate(_id, { $set: { ...updateUserDto, carTechnicalPassportPhoto } }, { new: true })
         return { message: "User car chnical Passport photo photo update" }
+      } else {
+        await this.userModel.findByIdAndUpdate(_id, { $set: updateUserDto }, { new: true })
+        return { message: "User profile update successfully" }
       }
 
     }
