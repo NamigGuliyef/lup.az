@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
+import { HttpCode, HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { REQUEST } from '@nestjs/core';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
@@ -8,7 +8,7 @@ import { tokenRequestType } from 'src/middleware/tokenReqType';
 import { CreateSupportDto } from 'src/notification/dto/notification.dto';
 import { UpdateUserDto } from './dto/user.dto';
 import { User } from './model/user.schema';
-import { comparePassword } from 'src/helpers/hash_compare';
+import { comparePassword, hashPassword } from 'src/helpers/hash_compare';
 
 
 @Injectable()
@@ -25,14 +25,14 @@ export class UserService {
     
     // əgər parol dəyişirsə
     if(updateUserDto.old_password){
-      const passRight=await comparePassword(updateUserDto.old_password,userExist.password)
-      if(!passRight) throw new HttpException('Pssword is wrong',HttpStatus.UNAUTHORIZED)
-
-
+      const passRight = await comparePassword(updateUserDto.old_password,userExist.password)
+      if(!passRight) throw new HttpException('Password is wrong', HttpStatus.UNAUTHORIZED)
+    } else {
+      const newHashPass = await hashPassword(updateUserDto.new_password)
+      await this.userModel.findByIdAndUpdate({_id:this.req.user._id},{ $set:{ password:newHashPass}},{new:true})
+      return { message: "Your password has been changed" }
     }
-
-
-
+    
     if ((files.profilePhoto && files.profilePhoto[0] && files.profilePhoto[0].path) || (files.driverLicensePhoto && files.driverLicensePhoto[0] && files.driverLicensePhoto[0].path) || (files.carTechnicalPassportPhoto && files.carTechnicalPassportPhoto[0] && files.carTechnicalPassportPhoto[0].path)) {
       let profilePhoto = []
       let driverLicensePhoto = []
@@ -43,7 +43,7 @@ export class UserService {
           const data = await cloudinary.uploader.upload(files.profilePhoto[i].path, { public_id: files.profilePhoto[i].originalname })
           profilePhoto.push(data.url)
         }
-        await this.userModel.findByIdAndUpdate(_id, { $set: { ...updateUserDto, profilePhoto } }, { new: true })
+        await this.userModel.findByIdAndUpdate({_id:this.req.user._id}, { $set: { ...updateUserDto, profilePhoto } }, { new: true })
         return { message: "User profile photo update" }
       }
 
@@ -54,7 +54,7 @@ export class UserService {
           const data = await cloudinary.uploader.upload(files.driverLicensePhoto[i].path, { public_id: files.driverLicensePhoto[i].originalname })
           driverLicensePhoto.push(data.url)
         }
-        await this.userModel.findByIdAndUpdate(_id, { $set: { ...updateUserDto, driverLicensePhoto } }, { new: true })
+        await this.userModel.findByIdAndUpdate({_id:this.req.user._id}, { $set: { ...updateUserDto, driverLicensePhoto } }, { new: true })
         return { message: "User driver license photo update" }
       }
 
@@ -65,10 +65,10 @@ export class UserService {
           const data = await cloudinary.uploader.upload(files.carTechnicalPassportPhoto[i].path, { public_id: files.carTechnicalPassportPhoto[i].originalname })
           carTechnicalPassportPhoto.push(data.url)
         }
-        await this.userModel.findByIdAndUpdate(_id, { $set: { ...updateUserDto, carTechnicalPassportPhoto } }, { new: true })
+        await this.userModel.findByIdAndUpdate({_id:this.req.user._id}, { $set: { ...updateUserDto, carTechnicalPassportPhoto } }, { new: true })
         return { message: "User car chnical Passport photo photo update" }
       } else {
-        await this.userModel.findByIdAndUpdate(_id, { $set: updateUserDto }, { new: true })
+        await this.userModel.findByIdAndUpdate({_id:this.req.user._id}, { $set: updateUserDto }, { new: true })
         return { message: "User profile update successfully" }
       }
 
