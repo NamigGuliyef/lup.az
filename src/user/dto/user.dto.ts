@@ -99,10 +99,6 @@ export class UpdateUserDto {
   bankCardNumber: string;
   @IsNotEmpty()
   @IsString()
-  @Length(8, 16)
-  password: string;
-  @IsNotEmpty()
-  @IsString()
   note: string;
   @IsOptional()
   @Length(8, 16)
