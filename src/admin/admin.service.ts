@@ -26,12 +26,12 @@ export class AdminService {
 
 
   // sub fleet name delete
-  async deleteSubFleetName(_id: string): Promise<messageResponse> {
-    const subFleetNameExist = await this.subFleetNameModel.findById(_id)
-    if (!subFleetNameExist) throw new HttpException('Sub fleet name not found', HttpStatus.NOT_FOUND)
-    await this.subFleetNameModel.findByIdAndDelete(_id)
-    return { message: 'Subfleet name deleted' }
-  }
+  // async deleteSubFleetName(_id: string): Promise<messageResponse> {
+  //   const subFleetNameExist = await this.subFleetNameModel.findById(_id)
+  //   if (!subFleetNameExist) throw new HttpException('Sub fleet name not found', HttpStatus.NOT_FOUND)
+  //   await this.subFleetNameModel.findByIdAndDelete(_id)
+  //   return { message: 'Subfleet name deleted' }
+  // }
 
 
   // sub fleet name update
@@ -57,12 +57,12 @@ export class AdminService {
   }
 
   // notification category delete
-  async deleteNotificationCategory(_id: string): Promise<messageResponse> {
-    const notificationCategoryExist = await this.notificationCategoryModel.findById(_id)
-    if (!notificationCategoryExist) throw new HttpException('Notification category not found', HttpStatus.NOT_FOUND)
-    await this.notificationCategoryModel.findByIdAndDelete(_id)
-    return { message: 'Notification category deleted' }
-  }
+  // async deleteNotificationCategory(_id: string): Promise<messageResponse> {
+  //   const notificationCategoryExist = await this.notificationCategoryModel.findById(_id)
+  //   if (!notificationCategoryExist) throw new HttpException('Notification category not found', HttpStatus.NOT_FOUND)
+  //   await this.notificationCategoryModel.findByIdAndDelete(_id)
+  //   return { message: 'Notification category deleted' }
+  // }
 
   // notification category update
   async updateNotificationCategory(_id: string, updateNotificationCategoryDto: UpdateNotificationCategoryDto): Promise<NotificationCategory> {

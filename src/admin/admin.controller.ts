@@ -22,11 +22,11 @@ export class AdminController {
   }
 
   // delete sub fleet name
-  @Delete('/dashboard/subfleetname/:_id')
-  @HttpCode(HttpStatus.OK)
-  async deleteSubFleetName(@Param('_id') _id: string): Promise<messageResponse> {
-    return await this.adminService.deleteSubFleetName(_id)
-  }
+  // @Delete('/dashboard/subfleetname/:_id')
+  // @HttpCode(HttpStatus.OK)
+  // async deleteSubFleetName(@Param('_id') _id: string): Promise<messageResponse> {
+  //   return await this.adminService.deleteSubFleetName(_id)
+  // }
 
   // update sub fleet name
   @Patch('/dashboard/subfleetname/:_id')
@@ -51,11 +51,11 @@ export class AdminController {
   }
 
   // delete notification category
-  @Delete('dashboard/notification-category/:_id')
-  @HttpCode(HttpStatus.OK)
-  async deleteNotificationCategory(@Param('_id') _id: string): Promise<messageResponse> {
-    return await this.adminService.deleteNotificationCategory(_id)
-  }
+  // @Delete('dashboard/notification-category/:_id')
+  // @HttpCode(HttpStatus.OK)
+  // async deleteNotificationCategory(@Param('_id') _id: string): Promise<messageResponse> {
+  //   return await this.adminService.deleteNotificationCategory(_id)
+  // }
 
   // notification category update
   @Patch('/dashboard/notification-category/:_id')
