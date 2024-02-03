@@ -27,7 +27,7 @@ export class AuthService {
     const courierNameSurnameExist = await this.userModel.find({ courierName: createUserDto.courierName, courierSurname: createUserDto.courierSurname })
     // əgər eyni ad və soyadda emekdas varsa username avtomatik reqemler atacaq
     if (courierNameSurnameExist) {
-      const nameSurnameExist = createUserDto.courierName.slice(0, 1).toLowerCase() + createUserDto.courierSurname.toLowerCase() + courierNameSurnameExist.length
+      const nameSurnameExist = createUserDto.courierName.toLowerCase() + createUserDto.courierSurname.toLowerCase() + courierNameSurnameExist.length
       // profil foto yukleme
       for (let i = 0; i < files.profilePhoto.length; i++) {
         const data = await cloudinary.uploader.upload(files.profilePhoto[i].path, { public_id: files.profilePhoto[i].originalname })
