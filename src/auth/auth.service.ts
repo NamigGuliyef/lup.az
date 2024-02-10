@@ -56,7 +56,7 @@ export class AuthService {
 
   // courier registration => sign-in
   async signIn(userSign: UserSignIn): Promise<tokenResponse> {
-    const userPhoneExist = await this.userModel.findOne({ courierPhone: userSign.phoneNumber })
+    const userPhoneExist = await this.userModel.findOne({ courierPhone: userSign.courierPhone })
     if (!userPhoneExist) throw new HttpException('User phone is wrong', HttpStatus.BAD_REQUEST)
     const passwordRight = await comparePassword(userSign.password, userPhoneExist.password)
     if (!passwordRight) throw new HttpException('Password is wrong', HttpStatus.UNAUTHORIZED)
