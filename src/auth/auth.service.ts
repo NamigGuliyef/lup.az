@@ -56,12 +56,12 @@ export class AuthService {
 
   // courier registration => sign-in
   async signIn(userSign: UserSignIn): Promise<tokenResponse> {
-    const userEmailExist = await this.userModel.findOne({ email: userSign.email })
-    if (!userEmailExist) throw new HttpException('Email is wrong', HttpStatus.BAD_REQUEST)
-    const passwordRight = await comparePassword(userSign.password, userEmailExist.password)
+    const userPhoneExist = await this.userModel.findOne({ courierPhone: userSign.phoneNumber })
+    if (!userPhoneExist) throw new HttpException('User phone is wrong', HttpStatus.BAD_REQUEST)
+    const passwordRight = await comparePassword(userSign.password, userPhoneExist.password)
     if (!passwordRight) throw new HttpException('Password is wrong', HttpStatus.UNAUTHORIZED)
-    const token = sign({ _id: userEmailExist._id, email: userEmailExist.email, role: userEmailExist.role }, jwtSecret, { expiresIn: '2h' })
-    return { token, message: 'You are successfully logged in.', role: userEmailExist.role }
+    const token = sign({ _id: userPhoneExist._id, courierPhone: userPhoneExist.courierPhone, role: userPhoneExist.role }, jwtSecret, { expiresIn: '2h' })
+    return { token, message: 'You are successfully logged in.', role: userPhoneExist.role }
   }
 
 }

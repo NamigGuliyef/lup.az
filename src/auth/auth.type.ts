@@ -3,7 +3,7 @@ export interface userSignUpResponse {
 }
 
 export interface UserSignIn {
-  email: string
+  phoneNumber: string
   password: string
 }
 
