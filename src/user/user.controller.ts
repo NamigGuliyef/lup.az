@@ -12,9 +12,9 @@ import {
   ValidationPipe
 } from '@nestjs/common';
 import { FileFieldsInterceptor } from '@nestjs/platform-express';
-import { messageResponse } from 'src/admin/admin.types';
-import { MulterOptions } from 'src/config/multer';
-import { CreateSupportDto } from 'src/notification/dto/notification.dto';
+import { messageResponse } from '../admin/admin.types';
+import { MulterOptions } from '../config/multer';
+import { CreateSupportDto } from '../notification/dto/notification.dto';
 import { UpdateUserDto } from './dto/user.dto';
 import { User, userModel } from './model/user.schema';
 import { UserService } from './user.service';

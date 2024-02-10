@@ -1,7 +1,7 @@
 import { Controller, Post, HttpCode, HttpStatus, UsePipes, ValidationPipe, UseInterceptors, Body, UploadedFiles } from '@nestjs/common';
 import { FileFieldsInterceptor } from '@nestjs/platform-express'
-import { MulterOptions } from 'src/config/multer';
-import { CreateUserDto } from 'src/user/dto/user.dto';
+import { MulterOptions } from '../config/multer';
+import { CreateUserDto } from '../user/dto/user.dto';
 import { AuthService } from './auth.service';
 import { UserSignIn, tokenResponse, userSignUpResponse } from './auth.type';
 

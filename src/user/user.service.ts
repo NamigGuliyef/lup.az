@@ -2,13 +2,13 @@ import { HttpCode, HttpException, HttpStatus, Inject, Injectable } from '@nestjs
 import { REQUEST } from '@nestjs/core';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { messageResponse } from 'src/admin/admin.types';
-import cloudinary from 'src/config/cloudinary';
-import { tokenRequestType } from 'src/middleware/tokenReqType';
-import { CreateSupportDto } from 'src/notification/dto/notification.dto';
+import { messageResponse } from '../admin/admin.types';
+import cloudinary from '../config/cloudinary';
+import { tokenRequestType } from '../middleware/tokenReqType';
+import { CreateSupportDto } from '../notification/dto/notification.dto';
 import { UpdateUserDto } from './dto/user.dto';
 import { User } from './model/user.schema';
-import { comparePassword, hashPassword } from 'src/helpers/hash_compare';
+import { comparePassword, hashPassword } from '../helpers/hash_compare';
 
 
 @Injectable()

@@ -1,13 +1,13 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { tokenResponse, UserSignIn, userSignUpResponse } from 'src/auth/auth.type';
-import cloudinary from 'src/config/cloudinary';
-import { comparePassword, hashPassword } from 'src/helpers/hash_compare';
-import { CreateUserDto } from 'src/user/dto/user.dto';
-import { User } from 'src/user/model/user.schema';
+import { tokenResponse, UserSignIn, userSignUpResponse } from '../auth/auth.type';
+import cloudinary from '../config/cloudinary';
+import { comparePassword, hashPassword } from '../helpers/hash_compare';
+import { CreateUserDto } from '../user/dto/user.dto';
+import { User } from '../user/model/user.schema';
 import { sign } from 'jsonwebtoken'
-import { jwtSecret } from 'src/config/jsonwebtoken';
+import { jwtSecret } from '../config/jsonwebtoken';
 
 @Injectable()
 export class AuthService {

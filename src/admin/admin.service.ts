@@ -1,13 +1,13 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { CreateNotificationCategoryDto, UpdateNotificationCategoryDto } from 'src/notification-category/dto/notificationCategory.dto';
-import { NotificationCategory } from 'src/notification-category/model/notificationCategory.schema';
-import { CreateNotificationDto } from 'src/notification/dto/notification.dto';
-import { Notification } from 'src/notification/model/notification.schema';
-import { CreateSubFleetNameDto, UpdateSubFleetNameDto } from 'src/subfleetname/dto/subfleetname.dto';
-import { subFleetName } from 'src/subfleetname/schema/subfleetname.schema';
-import { User } from 'src/user/model/user.schema';
+import { CreateNotificationCategoryDto, UpdateNotificationCategoryDto } from '../notification-category/dto/notificationCategory.dto';
+import { NotificationCategory } from '../notification-category/model/notificationCategory.schema';
+import { CreateNotificationDto } from '../notification/dto/notification.dto';
+import { Notification } from '../notification/model/notification.schema';
+import { CreateSubFleetNameDto, UpdateSubFleetNameDto } from '../subfleetname/dto/subfleetname.dto';
+import { subFleetName } from '../subfleetname/schema/subfleetname.schema';
+import { User } from '../user/model/user.schema';
 import { messageResponse } from './admin.types';
 
 @Injectable()

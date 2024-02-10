@@ -1,7 +1,7 @@
 import { HttpException, HttpStatus, NestMiddleware } from '@nestjs/common';
 import { verify } from 'jsonwebtoken';
-import { jwtSecret } from 'src/config/jsonwebtoken';
-import { User } from 'src/user/model/user.schema';
+import { jwtSecret } from '../config/jsonwebtoken';
+import { User } from '../user/model/user.schema';
 
 // user olub olmadigi butun sehiflere kecidler zamani yoxlanilir
 export class userAuthMiddleware implements NestMiddleware {

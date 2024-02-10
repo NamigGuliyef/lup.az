@@ -1,11 +1,11 @@
 import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Patch, Post, UsePipes, ValidationPipe } from '@nestjs/common';
-import { CreateNotificationCategoryDto, UpdateNotificationCategoryDto } from 'src/notification-category/dto/notificationCategory.dto';
-import { NotificationCategory } from 'src/notification-category/model/notificationCategory.schema';
-import { CreateNotificationDto } from 'src/notification/dto/notification.dto';
-import { Notification } from 'src/notification/model/notification.schema';
-import { CreateSubFleetNameDto, UpdateSubFleetNameDto } from 'src/subfleetname/dto/subfleetname.dto';
-import { subFleetName } from 'src/subfleetname/schema/subfleetname.schema';
-import { User } from 'src/user/model/user.schema';
+import { CreateNotificationCategoryDto, UpdateNotificationCategoryDto } from '../notification-category/dto/notificationCategory.dto';
+import { NotificationCategory } from '../notification-category/model/notificationCategory.schema';
+import { CreateNotificationDto } from '../notification/dto/notification.dto';
+import { Notification } from '../notification/model/notification.schema';
+import { CreateSubFleetNameDto, UpdateSubFleetNameDto } from '../subfleetname/dto/subfleetname.dto';
+import { subFleetName } from '../subfleetname/schema/subfleetname.schema';
+import { User } from '../user/model/user.schema';
 import { AdminService } from './admin.service';
 import { messageResponse } from './admin.types';
 
