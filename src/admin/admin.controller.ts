@@ -1,4 +1,6 @@
-import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Patch, Post, UsePipes, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Patch, Post, UploadedFile, UseInterceptors, UsePipes, ValidationPipe } from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { MulterOptions } from 'src/config/multer';
 import { CreateNotificationCategoryDto, UpdateNotificationCategoryDto } from '../notification-category/dto/notificationCategory.dto';
 import { NotificationCategory } from '../notification-category/model/notificationCategory.schema';
 import { CreateNotificationDto } from '../notification/dto/notification.dto';
@@ -93,4 +95,14 @@ export class AdminController {
   async getAllUserInformation(): Promise<User[]> {
     return await this.adminService.getAllUserInformation()
   }
+
+
+  @Post('/dashboard/report')
+  @UseInterceptors(FileInterceptor('file', MulterOptions))
+  async createReport(@UploadedFile() file: Express.Multer.File): Promise<messageResponse> {
+    console.log(file.path);
+
+    return await this.adminService.createReport(file.path)
+  }
+
 }

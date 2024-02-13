@@ -6,10 +6,12 @@ import { AdminController } from './admin.controller';
 import { AdminService } from './admin.service';
 import { notificationModel } from '../notification/model/notification.schema';
 import { NotificationCategoryModel } from '../notification-category/model/notificationCategory.schema';
+import { courierReportModel } from 'src/courier_report/model/report.schema';
 
 @Module({
   imports: [MongooseModule.forFeature([{ name: 'user', schema: userModel }, { name: 'subfleetname', schema: subFleetNameModel },
-  { name: 'notification', schema: notificationModel },{ name: 'notificationCategory', schema: NotificationCategoryModel }])],
+  { name: 'notification', schema: notificationModel },{ name: 'notificationCategory', schema: NotificationCategoryModel },
+  { name: 'report', schema: courierReportModel }])],
   providers: [AdminService],
   controllers: [AdminController]
 })

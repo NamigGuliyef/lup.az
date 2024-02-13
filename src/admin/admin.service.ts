@@ -1,6 +1,7 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
+import { CourierReport } from 'src/courier_report/model/report.schema';
 import { CreateNotificationCategoryDto, UpdateNotificationCategoryDto } from '../notification-category/dto/notificationCategory.dto';
 import { NotificationCategory } from '../notification-category/model/notificationCategory.schema';
 import { CreateNotificationDto } from '../notification/dto/notification.dto';
@@ -9,12 +10,14 @@ import { CreateSubFleetNameDto, UpdateSubFleetNameDto } from '../subfleetname/dt
 import { subFleetName } from '../subfleetname/schema/subfleetname.schema';
 import { User } from '../user/model/user.schema';
 import { messageResponse } from './admin.types';
+import * as ExcelJS from 'exceljs';
+
 
 @Injectable()
 export class AdminService {
   constructor(@InjectModel('user') private readonly userModel: Model<User>, @InjectModel('subfleetname') private readonly subFleetNameModel: Model<subFleetName>,
     @InjectModel('notificationCategory') private readonly notificationCategoryModel: Model<NotificationCategory>,
-    @InjectModel('notification') private readonly notificationModel: Model<Notification>
+    @InjectModel('notification') private readonly notificationModel: Model<Notification>, @InjectModel('report') private readonly courierReportModel: Model<CourierReport>
   ) { }
 
   // sub fleet name create
@@ -99,4 +102,38 @@ export class AdminService {
   }
 
 
+  async createReport(filePath: string): Promise<messageResponse> {
+    const workbook = new ExcelJS.Workbook();
+    console.log(workbook);
+
+    await workbook.xlsx.readFile(filePath);
+    console.log(filePath);
+    
+    const worksheet = workbook.getWorksheet(1);
+    console.log(worksheet);
+    
+    worksheet.eachRow({ includeEmpty: true }, async (row, _rowNumber) => {
+      console.log(row.values);
+      
+      const rowData: { [key: string]: any } = {};
+      if (_rowNumber === 1) {
+        console.log(_rowNumber);
+        
+        row.eachCell({ includeEmpty: true }, (cell, colNumber) => {
+          const columnName = cell.text;  // veya cell.value
+          rowData[colNumber] = columnName;
+        });
+      } else {
+        // Verileri al
+        row.eachCell({ includeEmpty: true }, (cell, colNumber) => {
+          const columnName = Object.keys(rowData)[colNumber - 1];
+          rowData[columnName] = cell.value;
+        });
+        console.log(rowData);       
+        await this.courierReportModel.create(rowData);
+      }
+    })
+    return { message: "oke" }
+  }
+  
 }
