@@ -7,11 +7,20 @@ import { AuthService } from './auth.service';
 import { NotificationCategoryModel } from '../notification-category/model/notificationCategory.schema';
 import { notificationModel } from '../notification/model/notification.schema';
 import { courierReportModel } from 'src/courier_report/model/report.schema';
+import { courierPayModel } from 'src/courier_pay/model/pay.schema';
 
 @Module({
-  imports: [MongooseModule.forFeature([{ name: 'user', schema: userModel }, { name: 'subfleetname', schema: subFleetNameModel },
-  { name: 'notification', schema: notificationModel }, { name: 'notificationCategory', schema: NotificationCategoryModel }, { name: 'report', schema: courierReportModel }])],
+  imports: [
+    MongooseModule.forFeature([
+      { name: 'user', schema: userModel },
+      { name: 'subfleetname', schema: subFleetNameModel },
+      { name: 'notification', schema: notificationModel },
+      { name: 'notificationCategory', schema: NotificationCategoryModel },
+      { name: 'report', schema: courierReportModel },
+      { name: 'courier_pay', schema: courierPayModel }
+    ]),
+  ],
   controllers: [AuthController],
-  providers: [AuthService,]
+  providers: [AuthService],
 })
-export class AuthModule { }
+export class AuthModule {}

@@ -1,5 +1,7 @@
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
+import { AdminController } from './admin/admin.controller';
+import { AdminModule } from './admin/admin.module';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
@@ -10,8 +12,6 @@ import {
 } from './middleware/authMiddleware';
 import { UserController } from './user/user.controller';
 import { UserModule } from './user/user.module';
-import { AdminController } from './admin/admin.controller';
-import { AdminModule } from './admin/admin.module';
 
 @Module({
   imports: [AuthModule, UserModule, MongooseModule.forRoot(uri), AdminModule],

@@ -1,6 +1,6 @@
-import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Patch, Post, UploadedFile, UseInterceptors, UsePipes, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, Get, HttpCode, HttpStatus, Param, Patch, Post, UploadedFile, UseInterceptors, UsePipes, ValidationPipe } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { MulterOptions } from 'src/config/multer';
+import { MulterOptionsExcel } from 'src/config/multer';
 import { CreateNotificationCategoryDto, UpdateNotificationCategoryDto } from '../notification-category/dto/notificationCategory.dto';
 import { NotificationCategory } from '../notification-category/model/notificationCategory.schema';
 import { CreateNotificationDto } from '../notification/dto/notification.dto';
@@ -10,6 +10,8 @@ import { subFleetName } from '../subfleetname/schema/subfleetname.schema';
 import { User } from '../user/model/user.schema';
 import { AdminService } from './admin.service';
 import { messageResponse } from './admin.types';
+import { CreateCourierPayDto } from 'src/courier_pay/dto/pay.dto';
+import { CourierPay, courierPayModel } from 'src/courier_pay/model/pay.schema';
 
 @Controller('admin')
 export class AdminController {
@@ -98,11 +100,17 @@ export class AdminController {
 
 
   @Post('/dashboard/report')
-  @UseInterceptors(FileInterceptor('file', MulterOptions))
+  @UseInterceptors(FileInterceptor('file', MulterOptionsExcel))
   async createReport(@UploadedFile() file: Express.Multer.File): Promise<messageResponse> {
-    console.log(file.path);
-
     return await this.adminService.createReport(file.path)
+  }
+
+
+  @Post('/dashboard/courier-pay')
+  @UsePipes(new ValidationPipe())
+  @HttpCode(HttpStatus.CREATED)
+  async courierPay(@Body() createCourierPayDto:CreateCourierPayDto):Promise<messageResponse>{
+    return await this.adminService.courierPay(createCourierPayDto)
   }
 
 }

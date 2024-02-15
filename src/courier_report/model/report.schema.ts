@@ -8,11 +8,11 @@ export class CourierReport {
   @Prop()
   fullname: string // name and surname
   @Prop()
-  total_earning: number
+  total_earning: string
   @Prop()
-  delivered_order: number
+  delivered_order: string
   @Prop()
-  debt: number
+  debt: string
 }
 
 export const courierReportModel = SchemaFactory.createForClass(CourierReport)
