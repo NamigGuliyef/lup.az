@@ -75,7 +75,8 @@ export class UserService {
 
   // user profile information
   async getUserProfile(): Promise<User> {
-    const userExist = await this.userModel.findOne({ email: this.req.user.email }).populate([{ path: 'subFleetName', select: 'name' }, { path: 'notifications', populate: { path: 'category' } }]).select('-password')
+    const userExist = await this.userModel.findOne({ email: this.req.user.email }).populate([{ path: 'subFleetName', select: 'name' }, { path: 'notifications', populate: { path: 'category' } , 
+ },  { path:'myPaymentIds'} ]).select('-password')
     if (!userExist) throw new HttpException('User not found', HttpStatus.OK)
     return userExist
   }

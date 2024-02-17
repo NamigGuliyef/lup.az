@@ -10,6 +10,8 @@ export class User {
   @Prop({ required: true, ref: 'subfleetname' })
   subFleetName: mongoose.Schema.Types.ObjectId; // altFleet-in adi (wolt-a getmesin, select-box olacaq, admin panel-de hemin alt-fleet-leri elave etmek olsun, analitika da olsun, hansi kuryerleri elave edib ve s., 5 gun active olmayan kuryer-lerde avtomatik mesaj gelsin)
   @Prop({ required: true })
+  woltId: string;
+  @Prop({ required: true })
   username: string; // Kuryerin istifadeci adi. Ad,soyadindan avtomatik generasiya edilecek. Eli Eliyev (eeliyev) Namiq Quiliyev (nquliyev) Ali Isiyev (aisiyev) Namiq Quliyev (nquliyev2)
   @Prop({ required: true })
   courierName: string;
@@ -41,6 +43,8 @@ export class User {
   note: string;
   @Prop({ required: true, ref: 'notification' })
   notifications: [mongoose.Schema.Types.ObjectId];
+  @Prop({ required: true, ref: 'report' })
+  myPaymentIds: [mongoose.Schema.Types.ObjectId];
   @Prop({ default: 'user', required: true })
   role: string;
   _id: any;

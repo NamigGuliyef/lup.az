@@ -181,19 +181,19 @@ export class AdminService {
   // all user about information
   async getAllUserInformation(): Promise<User[]> {
     return await this.userModel
-      .find()
+      .find().populate([{path:'myPaymentIds',select:'total_earning'}])
       .select(['username', 'courierName', 'courierSurname', 'email']);
   }
+
 
   // create report
   async createReport(filePath: string): Promise<messageResponse> {
     const workbook = new ExcelJS.Workbook();
-
     await workbook.xlsx.readFile(filePath);
     const worksheet = workbook.getWorksheet(1);
-    worksheet.eachRow({ includeEmpty: true }, async (row, _rowNumber) => {
+    worksheet.eachRow({ includeEmpty: true }, async (row, _rowNumber) => {      
       if (_rowNumber !== 1) {
-        const values = row.values;
+        const values = row.values;        
         const rowData = {
           courierId: values[2],
           fullname: values[3],
@@ -201,10 +201,20 @@ export class AdminService {
           delivered_order: values[5],
           debt: values[6],
         };
-        await this.courierReportModel.create(rowData);
+        const userPayment = await this.courierReportModel.create(rowData);
+        await this.userModel.findOneAndUpdate({ woltId:userPayment.courierId },{ $push:{ myPaymentIds:userPayment._id }})
       }
     });
     return { message: 'Added new information' };
+  }
+
+  // user ucun odenis edende odenis melumatlarini gostermek
+  async getUserPaymentDetails(email:string){
+    const paymentDetailsExist=await this.userModel.findOne({email}).select(['bankCardNumber','username'])
+    if(!paymentDetailsExist){
+      throw new HttpException('The user has no payment information',HttpStatus.NOT_FOUND)
+    }
+    return paymentDetailsExist
   }
 
 
@@ -218,5 +228,14 @@ const userExist=await this.userModel.findOne({bankCardNumber:createCourierPayDto
      return { message: "The payment was successfully made" }
  }
 }
+
+  // all user payment
+  async getUserAllPayment(){
+    return await this.userModel.find({role:'user'}).populate([{path:'myPaymentIds'}]).select('-password')
+  }
+
+  
+
+
 
 }

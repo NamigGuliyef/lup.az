@@ -106,6 +106,13 @@ export class AdminController {
   }
 
 
+  @Get('/dashboard/UserPaymentDetails/:email')
+  @HttpCode(HttpStatus.OK)
+  async getUserPaymentDetails(@Param('email') email:string){
+    return await this.adminService.getUserPaymentDetails(email)
+  }
+  
+
   @Post('/dashboard/courier-pay')
   @UsePipes(new ValidationPipe())
   @HttpCode(HttpStatus.CREATED)
@@ -113,4 +120,11 @@ export class AdminController {
     return await this.adminService.courierPay(createCourierPayDto)
   }
 
+
+  @Get('/dashboard/getUserAllPayment')
+  @HttpCode(HttpStatus.OK)
+  async getUserAllPayment(){
+    return await this.adminService.getUserAllPayment()
+  }
 }
+
