@@ -91,21 +91,10 @@ export class AdminService {
   }
 
   // notification category create
-  async createNotificationCategory(
-    createNotificationCategoryDto: CreateNotificationCategoryDto,
-  ): Promise<NotificationCategory> {
-    const notificationCategoryExist =
-      await this.notificationCategoryModel.findOne({
-        name: createNotificationCategoryDto.name,
-      });
-    if (notificationCategoryExist)
-      throw new HttpException(
-        'Notification category already exists',
-        HttpStatus.CONFLICT,
-      );
-    return await this.notificationCategoryModel.create(
-      createNotificationCategoryDto,
-    );
+  async createNotificationCategory( createNotificationCategoryDto: CreateNotificationCategoryDto ): Promise<NotificationCategory> {
+    const notificationCategoryExist = await this.notificationCategoryModel.findOne({ name: createNotificationCategoryDto.name });
+    if (notificationCategoryExist) throw new HttpException( 'Notification category already exists', HttpStatus.CONFLICT );
+    return await this.notificationCategoryModel.create( createNotificationCategoryDto );
   }
 
   // notification category delete
@@ -147,7 +136,7 @@ export class AdminService {
 
   // get all notification category
   async getAllNotificationCategory(): Promise<NotificationCategory[]> {
-    return await this.notificationCategoryModel.find();
+    return await this.notificationCategoryModel.find({ type:"admin" });
   }
 
 
@@ -229,5 +218,12 @@ export class AdminService {
       return { message: "Status changed successfully" }
   }
 
+
+  // all admin support notifications
+  async getAllSupportNotification():Promise<Notification[]>{
+    return await this.notificationModel.find({ type: "support" })
+  }
+
+  
 
 }

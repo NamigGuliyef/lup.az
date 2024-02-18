@@ -4,7 +4,7 @@ import { subFleetNameModel } from '../subfleetname/schema/subfleetname.schema';
 import { userModel } from '../user/model/user.schema';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
-import { NotificationCategoryModel } from '../notification-category/model/notificationCategory.schema';
+import { NotificationCategory, NotificationCategoryModel } from '../notification-category/model/notificationCategory.schema';
 import { notificationModel } from '../notification/model/notification.schema';
 import { courierReportModel } from 'src/courier_report/model/report.schema';
 import { courierPayModel } from 'src/courier_pay/model/pay.schema';

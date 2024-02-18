@@ -4,6 +4,8 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 export class NotificationCategory {
   @Prop({ required: true })
   name: string;
+  @Prop({ required: true })
+  type: string;
 }
 
 export const NotificationCategoryModel =

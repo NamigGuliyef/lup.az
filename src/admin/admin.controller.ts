@@ -1,6 +1,7 @@
 import { Body, Controller, Get, HttpCode, HttpStatus, Param, Patch, Post, UploadedFile, UseInterceptors, UsePipes, ValidationPipe } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { MulterOptionsExcel } from 'src/config/multer';
+import { UpdateReportStatusDto } from 'src/courier_report/dto/report.dto';
 import { CreateNotificationCategoryDto, UpdateNotificationCategoryDto } from '../notification-category/dto/notificationCategory.dto';
 import { NotificationCategory } from '../notification-category/model/notificationCategory.schema';
 import { CreateNotificationDto } from '../notification/dto/notification.dto';
@@ -10,9 +11,6 @@ import { subFleetName } from '../subfleetname/schema/subfleetname.schema';
 import { User } from '../user/model/user.schema';
 import { AdminService } from './admin.service';
 import { messageResponse } from './admin.types';
-import { CreateCourierPayDto } from 'src/courier_pay/dto/pay.dto';
-import { CourierPay, courierPayModel } from 'src/courier_pay/model/pay.schema';
-import { UpdateReportStatusDto } from 'src/courier_report/dto/report.dto';
 
 @Controller('admin')
 export class AdminController {
@@ -121,6 +119,14 @@ export class AdminController {
   async updateUserPaymentStatus(@Param('woltId') woltId:string, @Body() updateReportStatusDto:UpdateReportStatusDto):Promise<messageResponse>{
     return await this.adminService.updateUserPaymentStatus(woltId,updateReportStatusDto)
   }
+
+
+  @Get('/dashboard/allSupport')
+  @HttpCode(HttpStatus.OK)
+  async getAllSupportNotification():Promise<Notification[]>{
+    return await this.adminService.getAllSupportNotification()
+  }
+
 
 }
 

@@ -16,8 +16,10 @@ import { messageResponse } from '../admin/admin.types';
 import { MulterOptions } from '../config/multer';
 import { CreateSupportDto } from '../notification/dto/notification.dto';
 import { UpdateUserDto } from './dto/user.dto';
-import { User, userModel } from './model/user.schema';
+import { User } from './model/user.schema';
 import { UserService } from './user.service';
+import { Notification } from 'src/notification/model/notification.schema';
+import { NotificationCategory } from 'src/notification-category/model/notificationCategory.schema';
 
 @Controller('user')
 export class UserController {
@@ -46,5 +48,20 @@ export class UserController {
   async updateProfile(@Body() updateUserDto: UpdateUserDto, @UploadedFiles() files: { profilePhoto: Express.Multer.File[], driverLicensePhoto: Express.Multer.File[], carTechnicalPassportPhoto: Express.Multer.File[] }): Promise<messageResponse> {
     return await this.userService.updateProfile(updateUserDto, files)
   }
+
+
+  @Get('/profile/allNotifications')
+  @HttpCode(HttpStatus.OK)
+  async getAllUserNotification():Promise<Notification[]>{
+    return await this.userService.getAllUserNotification()
+  }
+
+
+  @Get('/allNotificationCategory')
+  @HttpCode(HttpStatus.OK)
+  async getAllNotificationCategory():Promise<NotificationCategory[]>{
+    return await this.userService.getAllNotificationCategory()
+  }
+
 
 }
