@@ -5,7 +5,11 @@ export class CourierPay {
   @Prop({ required: true })
   bankCardNumber: string;
   @Prop({ required: true })
-  amount_paid: number;
+  total_earning:string
+  @Prop({ required: true })
+  debt: string;
+  @Prop({ required: true })
+  amount_paid: string;
   @Prop({ required: true })
   status: string;
   @Prop({ required: true })

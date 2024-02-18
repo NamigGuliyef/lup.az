@@ -15,12 +15,15 @@ export class AuthService {
 
   // courier registration => sign-up
   async signUp(createUserDto: CreateUserDto, files: { profilePhoto: Express.Multer.File[], driverLicensePhoto: Express.Multer.File[], carTechnicalPassportPhoto: Express.Multer.File[] }): Promise<userSignUpResponse> {
-    const userEmailExist = await this.userModel.findOne({ email: createUserDto.email })
     // user-in tekrar olub olmadigini yoxlayir email ile
+    const userEmailExist = await this.userModel.findOne({ email: createUserDto.email })
     if (userEmailExist) throw new HttpException('User email already exists', HttpStatus.CONFLICT)
-    const userPhoneExist = await this.userModel.findOne({ courierPhone: createUserDto.courierPhone })
     // user-in tekrar olub olmadigini yoxlayir phone ile
+    const userPhoneExist = await this.userModel.findOne({ courierPhone: createUserDto.courierPhone })
     if (userPhoneExist) throw new HttpException('User phone already exists', HttpStatus.CONFLICT)
+    // user-in tekrar olub olmadigini yoxlayir woltId ile
+    const userWoltIdExist = await this.userModel.findOne({ woltId: createUserDto.woltId })
+    if (userWoltIdExist) throw new HttpException('User woltId already exists', HttpStatus.CONFLICT)
     let profilePhoto = []
     let driverLicensePhoto = []
     let carTechnicalPassportPhoto = []

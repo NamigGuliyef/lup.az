@@ -15,6 +15,8 @@ export class CreateUserDto {
   // @IsString()
   // username: string; // Kuryerin istifadeci adi. Ad,soyadindan avtomatik generasiya edilecek. Eli Eliyev (eeliyev) Namiq Quiliyev (nquliyev) Ali Isiyev (aisiyev) Namiq Quliyev (nquliyev2)
   @IsNotEmpty()
+  woltId: string;
+  @IsNotEmpty()
   @IsString()
   @Matches(new RegExp("^[A-Za-z]{3,20}$"))
   courierName: string;

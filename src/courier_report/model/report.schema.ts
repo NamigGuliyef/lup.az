@@ -14,7 +14,7 @@ export class CourierReport {
   delivered_order: string;
   @Prop()
   debt: string;
-  @Prop({ default: 'Ödənişi gözləyir' })
+  @Prop({ default: 'Ödəniş gözləyir' })
   status: string;
 }
 

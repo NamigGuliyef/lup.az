@@ -6,7 +6,11 @@ export class CreateCourierPayDto {
   @Length(16,16)
   bankCardNumber: string;
   @IsNotEmpty()
-  amount_paid: number;
+  total_earning: string;
+  @IsNotEmpty()
+  debt: string;
+  @IsNotEmpty()
+  amount_paid: string;
   @IsNotEmpty()
   status: string;
   @IsNotEmpty()

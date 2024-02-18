@@ -1,7 +1,12 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
+import { REQUEST } from '@nestjs/core';
 import { InjectModel } from '@nestjs/mongoose';
+import * as ExcelJS from 'exceljs';
 import { Model } from 'mongoose';
+import { CourierPay } from 'src/courier_pay/model/pay.schema';
+import { UpdateReportStatusDto } from 'src/courier_report/dto/report.dto';
 import { CourierReport } from 'src/courier_report/model/report.schema';
+import { tokenRequestType } from 'src/middleware/tokenReqType';
 import {
   CreateNotificationCategoryDto,
   UpdateNotificationCategoryDto,
@@ -16,13 +21,11 @@ import {
 import { subFleetName } from '../subfleetname/schema/subfleetname.schema';
 import { User } from '../user/model/user.schema';
 import { messageResponse } from './admin.types';
-import * as ExcelJS from 'exceljs';
-import { CourierPay } from 'src/courier_pay/model/pay.schema';
-import { CreateCourierPayDto } from 'src/courier_pay/dto/pay.dto';
 
 @Injectable()
 export class AdminService {
   constructor(
+    @Inject(REQUEST) private readonly req:tokenRequestType,
     @InjectModel('user') private readonly userModel: Model<User>,
     @InjectModel('subfleetname')
     private readonly subFleetNameModel: Model<subFleetName>,
@@ -147,6 +150,7 @@ export class AdminService {
     return await this.notificationCategoryModel.find();
   }
 
+
   // send notification
   async sendNotification(
     createNotificationDto: CreateNotificationDto,
@@ -161,6 +165,7 @@ export class AdminService {
     );
     return { message: 'Notifications have been sent to couriers successfully' };
   }
+
 
   // all support message
   async getAllSupportMessage(): Promise<Notification[]> {
@@ -208,34 +213,21 @@ export class AdminService {
     return { message: 'Added new information' };
   }
 
-  // user ucun odenis edende odenis melumatlarini gostermek
-  async getUserPaymentDetails(email:string){
-    const paymentDetailsExist=await this.userModel.findOne({email}).select(['bankCardNumber','username'])
-    if(!paymentDetailsExist){
-      throw new HttpException('The user has no payment information',HttpStatus.NOT_FOUND)
-    }
-    return paymentDetailsExist
-  }
-
-
-  // pay
- async courierPay(createCourierPayDto:CreateCourierPayDto):Promise<messageResponse>{
-const userExist=await this.userModel.findOne({bankCardNumber:createCourierPayDto.bankCardNumber,username:createCourierPayDto.username})
-  if(!userExist){
-    throw new HttpException('User data not found',HttpStatus.NOT_FOUND)
- } else {
-     await this.courierPayModel.create(createCourierPayDto)
-     return { message: "The payment was successfully made" }
- }
-}
 
   // all user payment
   async getUserAllPayment(){
     return await this.userModel.find({role:'user'}).populate([{path:'myPaymentIds'}]).select('-password')
   }
 
-  
-
+  // user all payment 
+  async updateUserPaymentStatus(woltId:string,updateReportStatusDto:UpdateReportStatusDto):Promise<messageResponse>{
+    const userExist=await this.userModel.findOne({woltId})
+    if(!userExist){
+      throw new HttpException("User not found",HttpStatus.NOT_FOUND)
+    }
+      await this.courierReportModel.findOneAndUpdate({courierId:woltId},{ $set:{status:updateReportStatusDto.status}})    
+      return { message: "Status changed successfully" }
+  }
 
 
 }
