@@ -8,7 +8,7 @@ export const MulterOptions = {
 export const MulterOptionsExcel = {
   storage: diskStorage({
     destination: (req, file, cb) => {
-      cb(null, './src/public');
+      cb(null, './../public');
     },
     filename(req, file, callback) {
       callback(null, file.originalname.slice(0, 10) + '.xlsx');

@@ -1,7 +1,7 @@
 import { Body, Controller, Get, HttpCode, HttpStatus, Param, Patch, Post, UploadedFile, UseInterceptors, UsePipes, ValidationPipe } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { MulterOptionsExcel } from 'src/config/multer';
-import { UpdateReportStatusDto } from 'src/courier_report/dto/report.dto';
+import { MulterOptionsExcel } from '../config/multer';
+import { UpdateReportStatusDto } from '../courier_report/dto/report.dto';
 import { CreateNotificationCategoryDto, UpdateNotificationCategoryDto } from '../notification-category/dto/notificationCategory.dto';
 import { NotificationCategory } from '../notification-category/model/notificationCategory.schema';
 import { CreateNotificationDto } from '../notification/dto/notification.dto';

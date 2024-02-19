@@ -6,8 +6,8 @@ import { AdminController } from './admin.controller';
 import { AdminService } from './admin.service';
 import { notificationModel } from '../notification/model/notification.schema';
 import { NotificationCategoryModel } from '../notification-category/model/notificationCategory.schema';
-import { courierReportModel } from 'src/courier_report/model/report.schema';
-import { courierPayModel } from 'src/courier_pay/model/pay.schema';
+import { courierReportModel } from '../courier_report/model/report.schema';
+import { courierPayModel } from '../courier_pay/model/pay.schema';
 
 @Module({
   imports: [

@@ -6,8 +6,8 @@ import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { NotificationCategory, NotificationCategoryModel } from '../notification-category/model/notificationCategory.schema';
 import { notificationModel } from '../notification/model/notification.schema';
-import { courierReportModel } from 'src/courier_report/model/report.schema';
-import { courierPayModel } from 'src/courier_pay/model/pay.schema';
+import { courierReportModel } from '../courier_report/model/report.schema';
+import { courierPayModel } from '../courier_pay/model/pay.schema';
 
 @Module({
   imports: [

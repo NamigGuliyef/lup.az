@@ -3,10 +3,10 @@ import { REQUEST } from '@nestjs/core';
 import { InjectModel } from '@nestjs/mongoose';
 import * as ExcelJS from 'exceljs';
 import { Model } from 'mongoose';
-import { CourierPay } from 'src/courier_pay/model/pay.schema';
-import { UpdateReportStatusDto } from 'src/courier_report/dto/report.dto';
-import { CourierReport } from 'src/courier_report/model/report.schema';
-import { tokenRequestType } from 'src/middleware/tokenReqType';
+import { CourierPay } from '../courier_pay/model/pay.schema';
+import { UpdateReportStatusDto } from '../courier_report/dto/report.dto';
+import { CourierReport } from '../courier_report/model/report.schema';
+import { tokenRequestType } from '../middleware/tokenReqType';
 import {
   CreateNotificationCategoryDto,
   UpdateNotificationCategoryDto,

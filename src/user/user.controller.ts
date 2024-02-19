@@ -18,8 +18,8 @@ import { CreateSupportDto } from '../notification/dto/notification.dto';
 import { UpdateUserDto } from './dto/user.dto';
 import { User } from './model/user.schema';
 import { UserService } from './user.service';
-import { Notification } from 'src/notification/model/notification.schema';
-import { NotificationCategory } from 'src/notification-category/model/notificationCategory.schema';
+import { Notification } from '../notification/model/notification.schema';
+import { NotificationCategory } from '../notification-category/model/notificationCategory.schema';
 
 @Controller('user')
 export class UserController {
