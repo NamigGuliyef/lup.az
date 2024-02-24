@@ -48,6 +48,8 @@ export class User {
   @Prop({ default: 'user', required: true })
   role: string;
   _id: any;
+  @Prop({ default: false, required:true })
+  isActive: boolean
 }
 
 export const userModel = SchemaFactory.createForClass(User);

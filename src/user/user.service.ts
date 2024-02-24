@@ -25,7 +25,8 @@ export class UserService {
   async updateProfile(updateUserDto: UpdateUserDto, files: { profilePhoto: Express.Multer.File[], driverLicensePhoto: Express.Multer.File[], carTechnicalPassportPhoto: Express.Multer.File[] }): Promise<messageResponse> {
     const userExist = await this.userModel.findById({ _id: this.req.user._id })
     if (!userExist) throw new HttpException('User not found', HttpStatus.NOT_FOUND)
-
+    const userEmailBankCardExist = await this.userModel.findOne({ courierPhone:updateUserDto.courierPhone, bankCardNumber:updateUserDto.bankCardNumber})
+    if(userEmailBankCardExist) throw new HttpException( 'User phone or bank card already exists', HttpStatus.CONFLICT)
     if ((files.profilePhoto && files.profilePhoto[0] && files.profilePhoto[0].path) || (files.driverLicensePhoto && files.driverLicensePhoto[0] && files.driverLicensePhoto[0].path) || (files.carTechnicalPassportPhoto && files.carTechnicalPassportPhoto[0] && files.carTechnicalPassportPhoto[0].path)) {
       let profilePhoto = []
       let driverLicensePhoto = []
