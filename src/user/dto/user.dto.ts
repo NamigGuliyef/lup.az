@@ -58,30 +58,6 @@ export class CreateUserDto {
 
 export class UpdateUserDto {
   @IsNotEmpty()
-  @IsEmail()
-  email: string;
-  @IsNotEmpty()
-  @IsString()
-  @Matches(new RegExp("^[A-Za-z]{3,30}$"))
-  fleetName: string;
-  @IsNotEmpty()
-  subFleetName: Types.ObjectId // altFleet-in adi (wolt-a getmesin, select-box olacaq, admin panel-de hemin alt-fleet-leri elave etmek olsun, analitika da olsun, hansi kuryerleri elave edib ve s., 5 gun active olmayan kuryer-lerde avtomatik mesaj gelsin)
-  // @IsNotEmpty()
-  // @IsString()
-  // username: string; // Kuryerin istifadeci adi. Ad,soyadindan avtomatik generasiya edilecek. Eli Eliyev (eeliyev) Namiq Quiliyev (nquliyev) Ali Isiyev (aisiyev) Namiq Quliyev (nquliyev2)
-  @IsNotEmpty()
-  @IsString()
-  @Matches(new RegExp("^[A-Za-z]{3,20}$"))
-  courierName: string;
-  @IsNotEmpty()
-  @IsString()
-  @Matches(new RegExp("^[A-Za-z]{3,20}$"))
-  courierSurname: string;
-  @IsNotEmpty()
-  @IsString()
-  @Matches(new RegExp("^[A-Za-z]{3,20}$"))
-  courierFatherName: string;
-  @IsNotEmpty()
   @IsPhoneNumber('AZ')
   @IsMobilePhone('az-AZ')
   courierPhone: string;
