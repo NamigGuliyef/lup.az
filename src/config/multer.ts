@@ -1,4 +1,5 @@
 import { diskStorage } from 'multer';
+import path from 'path';
 
 export const MulterOptions = {
   storage: diskStorage({}),
@@ -14,5 +15,12 @@ export const MulterOptionsExcel = {
       callback(null, file.originalname.slice(0, 10) + '.xlsx');
     },
   }),
+  fileFilter: (req:any, file:any, cb:any) => {
+    const ext = path.extname(file.originalname);
+    if (ext !== '.xlsx') {
+      return cb(new Error('Sadece .xlsx uzantısı  olan fayl yüklənməlidir.'));
+    }
+    cb(null, true);
+  },
   limits: { fileSize: 1024 * 1024 * 5 },
 };
