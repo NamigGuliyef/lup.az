@@ -108,9 +108,17 @@ export class AdminController {
 
   @Get('/dashboard/user-allPayment')
   @HttpCode(HttpStatus.OK)
-  async getUserAllPayment(){
+  async getUserAllPayment():Promise<User[]>{
     return await this.adminService.getUserAllPayment()
   }
+
+
+  @Get('/dashboard/user-allPayment/:woltId')
+  @HttpCode(HttpStatus.OK)
+  async getUserSinglePayment(@Param('woltId') woltId:string):Promise<User>{
+    return await this.adminService.getUserSinglePayment(woltId)
+  }
+
 
 
   @Patch('/dashboard/user-paymentStatus/:woltId')

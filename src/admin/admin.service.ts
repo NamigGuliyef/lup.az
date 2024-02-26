@@ -204,9 +204,18 @@ export class AdminService {
 
 
   // all user payment
-  async getUserAllPayment(){
+  async getUserAllPayment():Promise<User[]>{
     return await this.userModel.find({role:'user'}).populate([{path:'myPaymentIds'}]).select('-password')
   }
+
+
+  // single user payment
+  async getUserSinglePayment(woltId:string):Promise<User>{
+    const userSinglePayment=await this.userModel.findOne({woltId, role:'user'}).select('-password')
+    if(!userSinglePayment) throw new HttpException('User payment information not found', HttpStatus.NOT_FOUND)
+    return userSinglePayment.populate([ {path:'myPaymentIds'} ])
+  }
+
 
   // user all payment 
   async updateUserPaymentStatus(woltId:string,updateReportStatusDto:UpdateReportStatusDto):Promise<messageResponse>{

@@ -16,11 +16,14 @@ export const MulterOptionsExcel = {
     },
   }),
   fileFilter: (req:any, file:any, cb:any) => {
-    const ext = path.extname(file.originalname);
-    if (ext !== '.xlsx') {
-      return cb(new Error('Sadece .xlsx uzantısı  olan fayl yüklənməlidir.'));
+    console.log(file);
+    const ext = file.mimetype
+    console.log(file.originalname);
+    if (ext !== 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet') {
+      return cb(new Error('Sadece .xlsx uzantısı  olan fayl yüklənməlidir.'))
     }
     cb(null, true);
   },
   limits: { fileSize: 1024 * 1024 * 5 },
 };
+
