@@ -69,7 +69,7 @@ export class UpdateUserDto {
   @IsString()
   carAdvertising: string;
   @IsNotEmpty()
-  @IsString()
+  @IsString() 
   courierAccessories: string;
   @IsNotEmpty()
   @IsString()

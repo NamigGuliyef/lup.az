@@ -25,7 +25,7 @@ import { messageResponse } from './admin.types';
 @Injectable()
 export class AdminService {
   constructor(
-    @Inject(REQUEST) private readonly req:tokenRequestType,
+    @Inject(REQUEST) private readonly req: tokenRequestType,
     @InjectModel('user') private readonly userModel: Model<User>,
     @InjectModel('subfleetname')
     private readonly subFleetNameModel: Model<subFleetName>,
@@ -36,7 +36,7 @@ export class AdminService {
     @InjectModel('report')
     private readonly courierReportModel: Model<CourierReport>,
     @InjectModel('courier_pay')
-    private readonly courierPayModel: Model<CourierPay>
+    private readonly courierPayModel: Model<CourierPay>,
   ) {}
 
   // sub fleet name create
@@ -91,10 +91,21 @@ export class AdminService {
   }
 
   // notification category create
-  async createNotificationCategory( createNotificationCategoryDto: CreateNotificationCategoryDto ): Promise<NotificationCategory> {
-    const notificationCategoryExist = await this.notificationCategoryModel.findOne({ name: createNotificationCategoryDto.name });
-    if (notificationCategoryExist) throw new HttpException( 'Notification category already exists', HttpStatus.CONFLICT );
-    return await this.notificationCategoryModel.create( createNotificationCategoryDto );
+  async createNotificationCategory(
+    createNotificationCategoryDto: CreateNotificationCategoryDto,
+  ): Promise<NotificationCategory> {
+    const notificationCategoryExist =
+      await this.notificationCategoryModel.findOne({
+        name: createNotificationCategoryDto.name,
+      });
+    if (notificationCategoryExist)
+      throw new HttpException(
+        'Notification category already exists',
+        HttpStatus.CONFLICT,
+      );
+    return await this.notificationCategoryModel.create(
+      createNotificationCategoryDto,
+    );
   }
 
   // notification category delete
@@ -136,9 +147,8 @@ export class AdminService {
 
   // get all notification category
   async getAllNotificationCategory(): Promise<NotificationCategory[]> {
-    return await this.notificationCategoryModel.find({ type:"admin" });
+    return await this.notificationCategoryModel.find({ type: 'admin' });
   }
-
 
   // send notification
   async sendNotification(
@@ -154,7 +164,6 @@ export class AdminService {
     );
     return { message: 'Notifications have been sent to couriers successfully' };
   }
-
 
   // all support message
   async getAllSupportMessage(): Promise<Notification[]> {
@@ -175,19 +184,19 @@ export class AdminService {
   // all user about information
   async getAllUserInformation(): Promise<User[]> {
     return await this.userModel
-      .find().populate([{path:'myPaymentIds',select:'total_earning'}])
+      .find()
+      .populate([{ path: 'myPaymentIds', select: 'total_earning' }])
       .select(['username', 'courierName', 'courierSurname', 'email']);
   }
-
 
   // create report
   async createReport(filePath: string): Promise<messageResponse> {
     const workbook = new ExcelJS.Workbook();
     await workbook.xlsx.readFile(filePath);
     const worksheet = workbook.getWorksheet(1);
-    worksheet.eachRow({ includeEmpty: true }, async (row, _rowNumber) => {      
+    worksheet.eachRow({ includeEmpty: true }, async (row, _rowNumber) => {
       if (_rowNumber !== 1) {
-        const values = row.values;        
+        const values = row.values;
         const rowData = {
           courierId: values[2],
           fullname: values[3],
@@ -196,43 +205,58 @@ export class AdminService {
           debt: values[6],
         };
         const userPayment = await this.courierReportModel.create(rowData);
-        await this.userModel.findOneAndUpdate({ woltId:userPayment.courierId },{ $push:{ myPaymentIds:userPayment._id }})
+        await this.userModel.findOneAndUpdate(
+          { woltId: userPayment.courierId },
+          { $push: { myPaymentIds: userPayment._id } },
+        );
       }
     });
     return { message: 'Added new information' };
   }
 
-
   // all user payment
-  async getUserAllPayment():Promise<User[]>{
-    return await this.userModel.find({role:'user'}).populate([{path:'myPaymentIds'}]).select('-password')
+  async getUserAllPayment(): Promise<User[]> {
+    return await this.userModel
+      .find({ role: 'user' })
+      .populate([{ path: 'myPaymentIds' }])
+      .select('-password');
   }
-
 
   // single user payment
-  async getUserSinglePayment(woltId:string):Promise<User>{
-    const userSinglePayment=await this.userModel.findOne({woltId, role:'user'}).select('-password')
-    if(!userSinglePayment) throw new HttpException('User payment information not found', HttpStatus.NOT_FOUND)
-    return userSinglePayment.populate([ {path:'myPaymentIds'} ])
+  async getUserSinglePayment(woltId: string): Promise<User> {
+    const userSinglePayment = await this.userModel
+      .findOne({ woltId, role: 'user' })
+      .select('-password');
+    if (!userSinglePayment)
+      throw new HttpException(
+        'User payment information not found',
+        HttpStatus.NOT_FOUND,
+      );
+    return userSinglePayment.populate([{ path: 'myPaymentIds' }]);
   }
 
-
-  // user all payment 
-  async updateUserPaymentStatus(woltId:string,updateReportStatusDto:UpdateReportStatusDto):Promise<messageResponse>{
-    const userExist=await this.userModel.findOne({woltId})
-    if(!userExist){
-      throw new HttpException("User not found",HttpStatus.NOT_FOUND)
+  // user all payment
+  async updateUserPaymentStatus(
+    woltId: string,
+    updateReportStatusDto: UpdateReportStatusDto,
+  ): Promise<messageResponse> {
+    const userExist = await this.userModel.findOne({ woltId });
+    if (!userExist) {
+      throw new HttpException('User not found', HttpStatus.NOT_FOUND);
     }
-      await this.courierReportModel.findOneAndUpdate({courierId:woltId},{ $set:{status:updateReportStatusDto.status}})    
-      return { message: "Status changed successfully" }
+    await this.courierReportModel.findOneAndUpdate(
+      { courierId: woltId },
+      { $set: { status: updateReportStatusDto.status } },
+      {
+        upsert: true,
+        sort: { createdAt: -1 },
+      },
+    );
+    return { message: 'Status changed successfully' };
   }
-
 
   // all admin support notifications
-  async getAllSupportNotification():Promise<Notification[]>{
-    return await this.notificationModel.find({ type: "support" })
+  async getAllSupportNotification(): Promise<Notification[]> {
+    return await this.notificationModel.find({ type: 'support' });
   }
-
-  
-
 }

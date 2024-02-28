@@ -9,8 +9,8 @@ export class CreateNotificationDto {
 }
 
 export class CreateSupportDto {
-  @IsNotEmpty()
+  // @IsNotEmpty()
   category: mongoose.Schema.Types.ObjectId;
-  @IsNotEmpty()
+  // @IsNotEmpty()
   message: string;
 }
