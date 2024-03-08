@@ -9,14 +9,14 @@ import { CourierReport } from '../courier_report/model/report.schema';
 import { tokenRequestType } from '../middleware/tokenReqType';
 import {
   CreateNotificationCategoryDto,
-  UpdateNotificationCategoryDto,
+  UpdateNotificationCategoryDto
 } from '../notification-category/dto/notificationCategory.dto';
 import { NotificationCategory } from '../notification-category/model/notificationCategory.schema';
 import { CreateNotificationDto } from '../notification/dto/notification.dto';
 import { Notification } from '../notification/model/notification.schema';
 import {
   CreateSubFleetNameDto,
-  UpdateSubFleetNameDto,
+  UpdateSubFleetNameDto
 } from '../subfleetname/dto/subfleetname.dto';
 import { subFleetName } from '../subfleetname/schema/subfleetname.schema';
 import { User } from '../user/model/user.schema';
@@ -75,7 +75,7 @@ export class AdminService {
     });
     if (subFleetNameExist)
       throw new HttpException(
-        'Sub fleet name already exi  sts',
+        'Sub fleet name already exists',
         HttpStatus.CONFLICT,
       );
     return await this.subFleetNameModel.findByIdAndUpdate(
@@ -147,7 +147,7 @@ export class AdminService {
 
   // get all notification category
   async getAllNotificationCategory(): Promise<NotificationCategory[]> {
-    return await this.notificationCategoryModel.find({ type: 'admin' });
+    return await this.notificationCategoryModel.find();
   }
 
   // send notification

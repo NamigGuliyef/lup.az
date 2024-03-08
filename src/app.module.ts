@@ -12,10 +12,12 @@ import {
 } from './middleware/authMiddleware';
 import { UserController } from './user/user.controller';
 import { UserModule } from './user/user.module';
+import { GuestController } from './guest/guest.controller';
+import { GuestModule } from './guest/guest.module';
 
 @Module({
-  imports: [AuthModule, UserModule, MongooseModule.forRoot(uri), AdminModule],
-  controllers: [AppController],
+  imports: [AuthModule, UserModule, MongooseModule.forRoot(uri), AdminModule, GuestModule],
+  controllers: [AppController, GuestController],
   providers: [AppService],
 })
 export class AppModule implements NestModule {
