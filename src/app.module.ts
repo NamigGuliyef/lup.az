@@ -17,7 +17,7 @@ import { GuestModule } from './guest/guest.module';
 
 @Module({
   imports: [AuthModule, UserModule, MongooseModule.forRoot(uri), AdminModule, GuestModule],
-  controllers: [AppController, GuestController],
+  controllers: [AppController],
   providers: [AppService],
 })
 export class AppModule implements NestModule {
