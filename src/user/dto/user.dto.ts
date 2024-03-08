@@ -14,7 +14,7 @@ export class CreateUserDto {
   // @IsNotEmpty()
   // @IsString()
   // username: string; // Kuryerin istifadeci adi. Ad,soyadindan avtomatik generasiya edilecek. Eli Eliyev (eeliyev) Namiq Quiliyev (nquliyev) Ali Isiyev (aisiyev) Namiq Quliyev (nquliyev2)
-  @IsNotEmpty()
+  @IsOptional()
   woltId: string;
   @IsNotEmpty()
   @IsString()
@@ -57,6 +57,8 @@ export class CreateUserDto {
 
 
 export class UpdateUserDto {
+  @IsOptional()
+  woltId: string;
   @IsNotEmpty()
   @IsPhoneNumber('AZ')
   @IsMobilePhone('az-AZ')

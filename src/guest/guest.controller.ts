@@ -13,5 +13,4 @@ export class GuestController {
       return await this.guestService.getAllSubFleetName()
     }
 
-
 }
