@@ -37,7 +37,7 @@ export class AdminService {
     private readonly courierReportModel: Model<CourierReport>,
     @InjectModel('courier_pay')
     private readonly courierPayModel: Model<CourierPay>,
-  ) {}
+  ) { }
 
   // sub fleet name create
   async createSubFleetName(
@@ -257,6 +257,6 @@ export class AdminService {
 
   // all admin support notifications
   async getAllSupportNotification(): Promise<Notification[]> {
-    return await this.notificationModel.find({ type: 'support' });
+    return await this.notificationModel.find({ type: 'support' }).populate([{ path: 'category' }, { path: 'user' }]);
   }
 }
