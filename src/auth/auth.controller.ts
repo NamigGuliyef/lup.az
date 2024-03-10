@@ -13,8 +13,8 @@ export class AuthController {
   @Post('/sign-up')
   @UsePipes(new ValidationPipe())
   @HttpCode(HttpStatus.CREATED)
-  @UseInterceptors(FileFieldsInterceptor([{ name: 'profilePhoto', maxCount: 1 }, { name: 'driverLicensePhoto', maxCount: 4 }, { name: 'carTechnicalPassportPhoto', maxCount: 4 }], MulterOptions))
-  async signUp(@Body() createUserDto: CreateUserDto, @UploadedFiles() files: { profilePhoto: Express.Multer.File[], driverLicensePhoto: Express.Multer.File[], carTechnicalPassportPhoto: Express.Multer.File[] }): Promise<userSignUpResponse> {
+  @UseInterceptors(FileFieldsInterceptor([{ name: 'profilePhoto', maxCount: 1 }, { name: 'idCard', maxCount: 2 }, { name: 'driverLicensePhoto', maxCount: 4 }, { name: 'carTechnicalPassportPhoto', maxCount: 4 }], MulterOptions))
+  async signUp(@Body() createUserDto: CreateUserDto, @UploadedFiles() files: { profilePhoto: Express.Multer.File[], idCard: Express.Multer.File[], driverLicensePhoto: Express.Multer.File[], carTechnicalPassportPhoto: Express.Multer.File[] }): Promise<userSignUpResponse> {
     return await this.authService.signUp(createUserDto, files)
   }
 
