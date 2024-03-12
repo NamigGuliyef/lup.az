@@ -233,6 +233,13 @@ export class AdminService {
     return await this.notificationModel.find({ type: "support" })
   }
 
-  
+  // istifadəçi təsdiqi false => true
+ async userConfirmation(id:string ):Promise<messageResponse>{
+  const userActive = await this.userModel.findByIdAndUpdate(id, { $set:{ isActive:true }} , { new:true }) // userActive-i true edildi
+  // subfleet id-si user-in subfleet id si tapilir ve subfleet -in kuryerlerinin massivinin icerisine aktiv edilen user-in id-si elave edilir
+  await this.subFleetNameModel.findOneAndUpdate({ _id:userActive.subFleetName },{ $push: { courierIds:userActive._id} },{ new:true })
+    return  { message: "User activated"}
+ }
+
 
 }

@@ -1,6 +1,5 @@
 import { HttpException, HttpStatus } from '@nestjs/common';
 import { diskStorage } from 'multer';
-import path from 'path';
 
 export const MulterOptions = {
   storage: diskStorage({}),
@@ -10,7 +9,7 @@ export const MulterOptions = {
 export const MulterOptionsExcel = {
   fileFilter: (req:any, file:any, cb:any) => {
     console.log(file);
-    const ext = file.mimetype
+    const ext = file.mimetypes
     console.log(file.originalname);
     if (ext !== 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet') {
       return cb(new HttpException('Sadece .xlsx uzantısı  olan fayl yüklənməlidir.',HttpStatus.BAD_REQUEST))

@@ -39,3 +39,21 @@ export class adminAuthMiddleware implements NestMiddleware {
     });
   }
 }
+
+// sub fleet olub olmadigi yoxlanilir
+export class subfleetAuthMiddleware implements NestMiddleware {
+  use(req: any, res: any, next: (error?: any) => void) {
+    const token = req.headers.authorization?.split(' ')[1];
+    if (!token) throw new HttpException('No auth token', HttpStatus.NOT_FOUND);
+    verify(token, jwtSecret, (err: any, subfleet: User) => {
+      if (err) {
+        throw new HttpException('Invalid auth token', HttpStatus.FORBIDDEN);
+      } else if (subfleet.role !== 'subfleet') {
+        throw new HttpException('You are not subfleet', HttpStatus.FORBIDDEN);
+      } else {
+        req.subfleet = subfleet;
+        next();
+      }
+    });
+  }
+}
