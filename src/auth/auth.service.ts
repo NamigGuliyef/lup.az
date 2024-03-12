@@ -14,7 +14,7 @@ export class AuthService {
   constructor(@InjectModel('user') private readonly userModel: Model<User>) { }
 
   // courier registration => sign-up
-  async signUp(createUserDto: CreateUserDto, files: { profilePhoto: Express.Multer.File[], driverLicensePhoto: Express.Multer.File[], carTechnicalPassportPhoto: Express.Multer.File[] }): Promise<userSignUpResponse> {
+  async signUp(createUserDto: CreateUserDto, files: { profilePhoto: Express.Multer.File[], idCard: Express.Multer.File[], driverLicensePhoto: Express.Multer.File[], carTechnicalPassportPhoto: Express.Multer.File[] }): Promise<userSignUpResponse> {
     // user-in tekrar olub olmadigini yoxlayir email ile
     const userEmailExist = await this.userModel.findOne({ email: createUserDto.email })
     if (userEmailExist) throw new HttpException('User email already exists', HttpStatus.CONFLICT)
@@ -22,9 +22,10 @@ export class AuthService {
     const userPhoneExist = await this.userModel.findOne({ courierPhone: createUserDto.courierPhone })
     if (userPhoneExist) throw new HttpException('User phone already exists', HttpStatus.CONFLICT)
     // user-in tekrar olub olmadigini yoxlayir woltId ile
-    const userWoltIdExist = await this.userModel.findOne({ woltId: createUserDto.woltId })
-    if (userWoltIdExist) throw new HttpException('User woltId already exists', HttpStatus.CONFLICT)
+    // const userWoltIdExist = await this.userModel.findOne({ woltId: createUserDto.woltId })
+    // if (userWoltIdExist) throw new HttpException('User woltId already exists', HttpStatus.CONFLICT)
     let profilePhoto = []
+    let idCard = []
     let driverLicensePhoto = []
     let carTechnicalPassportPhoto = []
     const courierNameSurnameExist = await this.userModel.find({ courierName: createUserDto.courierName, courierSurname: createUserDto.courierSurname })
@@ -35,6 +36,11 @@ export class AuthService {
       for (let i = 0; i < files.profilePhoto.length; i++) {
         const data = await cloudinary.uploader.upload(files.profilePhoto[i].path, { public_id: files.profilePhoto[i].originalname })
         profilePhoto.push(data.url)
+      }
+      // id Card yukleme
+      for (let i = 0; i < files.idCard.length; i++) {
+        const data = await cloudinary.uploader.upload(files.idCard[i].path, { public_id: files.idCard[i].originalname })
+        idCard.push(data.url)
       }
       // suruculuk vesiqesi yukleme
       for (let i = 0; i < files.driverLicensePhoto.length; i++) {
@@ -47,11 +53,11 @@ export class AuthService {
         carTechnicalPassportPhoto.push(data.url)
       }
 
-      await this.userModel.create({ ...createUserDto, username: nameSurnameExist, password: await hashPassword(createUserDto.password), profilePhoto, driverLicensePhoto, carTechnicalPassportPhoto })
+      await this.userModel.create({ ...createUserDto, username: nameSurnameExist, password: await hashPassword(createUserDto.password), profilePhoto, idCard, driverLicensePhoto, carTechnicalPassportPhoto })
       return { message: 'You have registered successfully' }
     } else {
       const nameSurname = createUserDto.courierName.slice(0, 1).toLowerCase() + createUserDto.courierSurname.toLowerCase()
-      await this.userModel.create({ ...createUserDto, username: nameSurname, password: await hashPassword(createUserDto.password), profilePhoto, driverLicensePhoto, carTechnicalPassportPhoto })
+      await this.userModel.create({ ...createUserDto, username: nameSurname, password: await hashPassword(createUserDto.password), profilePhoto, idCard, driverLicensePhoto, carTechnicalPassportPhoto })
       return { message: 'You have registered successfully' }
     }
   }

@@ -1,6 +1,7 @@
-import { Body, Controller, Get, HttpCode, HttpStatus, Param, Patch, Post, UploadedFile, UseInterceptors, UsePipes, ValidationPipe } from '@nestjs/common';
-import { FileInterceptor } from '@nestjs/platform-express';
-import { MulterOptionsExcel } from '../config/multer';
+import { Body, Controller, Get, HttpCode, HttpStatus, Param, Patch, Post, UploadedFile, UploadedFiles, UseInterceptors, UsePipes, ValidationPipe } from '@nestjs/common';
+import { FileFieldsInterceptor, FileInterceptor } from '@nestjs/platform-express';
+import { UpdateUserDto } from 'src/user/dto/user.dto';
+import { MulterOptions, MulterOptionsExcel } from '../config/multer';
 import { UpdateReportStatusDto } from '../courier_report/dto/report.dto';
 import { CreateNotificationCategoryDto, UpdateNotificationCategoryDto } from '../notification-category/dto/notificationCategory.dto';
 import { NotificationCategory } from '../notification-category/model/notificationCategory.schema';
@@ -108,14 +109,14 @@ export class AdminController {
 
   @Get('/dashboard/user-allPayment')
   @HttpCode(HttpStatus.OK)
-  async getUserAllPayment():Promise<User[]>{
+  async getUserAllPayment(): Promise<User[]> {
     return await this.adminService.getUserAllPayment()
   }
 
 
   @Get('/dashboard/user-allPayment/:woltId')
   @HttpCode(HttpStatus.OK)
-  async getUserSinglePayment(@Param('woltId') woltId:string):Promise<User>{
+  async getUserSinglePayment(@Param('woltId') woltId: string): Promise<User> {
     return await this.adminService.getUserSinglePayment(woltId)
   }
 
@@ -124,15 +125,23 @@ export class AdminController {
   @Patch('/dashboard/user-paymentStatus/:woltId')
   @HttpCode(HttpStatus.OK)
   @UsePipes(new ValidationPipe())
-  async updateUserPaymentStatus(@Param('woltId') woltId:string, @Body() updateReportStatusDto:UpdateReportStatusDto):Promise<messageResponse>{
-    return await this.adminService.updateUserPaymentStatus(woltId,updateReportStatusDto)
+  async updateUserPaymentStatus(@Param('woltId') woltId: string, @Body() updateReportStatusDto: UpdateReportStatusDto): Promise<messageResponse> {
+    return await this.adminService.updateUserPaymentStatus(woltId, updateReportStatusDto)
   }
 
 
   @Get('/dashboard/allSupport')
   @HttpCode(HttpStatus.OK)
-  async getAllSupportNotification():Promise<Notification[]>{
+  async getAllSupportNotification(): Promise<Notification[]> {
     return await this.adminService.getAllSupportNotification()
+  }
+
+  @Patch('/dashboard/user/profile/update/:_id')
+  @HttpCode(HttpStatus.OK)
+  @UsePipes(new ValidationPipe())
+  @UseInterceptors(FileFieldsInterceptor([{ name: 'profilePhoto', maxCount: 1 }, { name: 'idCard', maxCount: 2 }, { name: 'driverLicensePhoto', maxCount: 4 }, { name: 'carTechnicalPassportPhoto', maxCount: 4 }], MulterOptions))
+  async updateProfile(@Param('_id') _id: string, @Body() updateUserDto: UpdateUserDto, @UploadedFiles() files: { profilePhoto: Express.Multer.File[], idCard: Express.Multer.File[], driverLicensePhoto: Express.Multer.File[], carTechnicalPassportPhoto: Express.Multer.File[] }): Promise<messageResponse> {
+    return await this.adminService.updateProfile(_id, updateUserDto, files)
   }
 
 
