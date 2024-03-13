@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
-import { subFleetNameModel } from '../subfleetname/schema/subfleetname.schema';
+import { subFleetNameModel } from '../subfleet/schema/subfleetname.schema';
 import { userModel } from '../user/model/user.schema';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
@@ -23,4 +23,4 @@ import { courierPayModel } from '../courier_pay/model/pay.schema';
   controllers: [AuthController],
   providers: [AuthService],
 })
-export class AuthModule {}
+export class AuthModule { }

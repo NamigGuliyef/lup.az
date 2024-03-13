@@ -22,7 +22,7 @@ export class AuthController {
   @Post('/sign-in')
   @HttpCode(HttpStatus.OK)
   @UsePipes(new ValidationPipe())
-  async signIn(@Body() userSignIn:UserSignIn):Promise<tokenResponse>{
+  async signIn(@Body() userSignIn: UserSignIn): Promise<tokenResponse> {
     return await this.authService.signIn(userSignIn)
   }
 }

@@ -20,8 +20,8 @@ import { Notification } from '../notification/model/notification.schema';
 import {
   CreateSubFleetNameDto,
   UpdateSubFleetNameDto
-} from '../subfleetname/dto/subfleetname.dto';
-import { subFleetName } from '../subfleetname/schema/subfleetname.schema';
+} from '../subfleet/dto/subfleetname.dto';
+import { subFleetName } from '../subfleet/schema/subfleetname.schema';
 import { User } from '../user/model/user.schema';
 import { messageResponse } from './admin.types';
 
@@ -331,12 +331,12 @@ export class AdminService {
   }
 
   // istifadəçi təsdiqi false => true
- async userConfirmation(id:string ):Promise<messageResponse>{
-  const userActive = await this.userModel.findByIdAndUpdate(id, { $set:{ isActive:true }} , { new:true }) // userActive-i true edildi
-  // subfleet id-si user-in subfleet id si tapilir ve subfleet -in kuryerlerinin massivinin icerisine aktiv edilen user-in id-si elave edilir
-  await this.subFleetNameModel.findOneAndUpdate({ _id:userActive.subFleetName },{ $push: { courierIds:userActive._id} },{ new:true })
-    return  { message: "User activated"}
- }
+  async userConfirmation(id: string): Promise<messageResponse> {
+    const userActive = await this.userModel.findByIdAndUpdate(id, { $set: { isActive: true } }, { new: true }) // userActive-i true edildi
+    // subfleet id-si user-in subfleet id si tapilir ve subfleet -in kuryerlerinin massivinin icerisine aktiv edilen user-in id-si elave edilir
+    await this.subFleetNameModel.findOneAndUpdate({ _id: userActive.subFleetName }, { $push: { courierIds: userActive._id } }, { new: true })
+    return { message: "User activated" }
+  }
 
- 
+
 }

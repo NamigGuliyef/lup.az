@@ -69,9 +69,11 @@ export class AuthService {
     if (!userPhoneExist) throw new HttpException('User phone is wrong', HttpStatus.BAD_REQUEST)
     const passwordRight = await comparePassword(userSign.password, userPhoneExist.password)
     if (!passwordRight) throw new HttpException('Password is wrong', HttpStatus.UNAUTHORIZED)
-    if(userPhoneExist.isActive === false) throw new HttpException('User has not been activated by admin', HttpStatus.BAD_REQUEST)
-    const token = sign({ _id: userPhoneExist._id, courierName:userPhoneExist.courierName, courierSurname:userPhoneExist.courierSurname,
-       courierPhone: userPhoneExist.courierPhone, email:userPhoneExist.email, role: userPhoneExist.role }, jwtSecret, { expiresIn: '2h' })
+    if (userPhoneExist.isActive === false) throw new HttpException('User has not been activated by admin', HttpStatus.BAD_REQUEST)
+    const token = sign({
+      _id: userPhoneExist._id, courierName: userPhoneExist.courierName, courierSurname: userPhoneExist.courierSurname,
+      courierPhone: userPhoneExist.courierPhone, email: userPhoneExist.email, role: userPhoneExist.role
+    }, jwtSecret, { expiresIn: '2h' })
     return { token, message: 'You are successfully logged in.', role: userPhoneExist.role }
   }
 

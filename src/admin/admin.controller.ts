@@ -7,8 +7,8 @@ import { CreateNotificationCategoryDto, UpdateNotificationCategoryDto } from '..
 import { NotificationCategory } from '../notification-category/model/notificationCategory.schema';
 import { CreateNotificationDto } from '../notification/dto/notification.dto';
 import { Notification } from '../notification/model/notification.schema';
-import { CreateSubFleetNameDto, UpdateSubFleetNameDto } from '../subfleetname/dto/subfleetname.dto';
-import { subFleetName } from '../subfleetname/schema/subfleetname.schema';
+import { CreateSubFleetNameDto, UpdateSubFleetNameDto } from '../subfleet/dto/subfleetname.dto';
+import { subFleetName } from '../subfleet/schema/subfleetname.schema';
 import { User } from '../user/model/user.schema';
 import { AdminService } from './admin.service';
 import { messageResponse } from './admin.types';
@@ -145,9 +145,9 @@ export class AdminController {
   }
 
 
-  @Post('/dashboard/user-confirmation')
+  @Patch('/dashboard/user-confirmation/:id')
   @HttpCode(HttpStatus.OK)
-  async userConfirmation(id:string):Promise<messageResponse>{
+  async userConfirmation(@Param('id') id:string):Promise<messageResponse>{
     return await this.adminService.userConfirmation(id)
   }
 

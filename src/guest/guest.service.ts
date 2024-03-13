@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { subFleetName } from 'src/subfleetname/schema/subfleetname.schema';
+import { subFleetName } from 'src/subfleet/schema/subfleetname.schema';
 
 @Injectable()
 export class GuestService {

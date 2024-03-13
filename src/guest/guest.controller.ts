@@ -1,5 +1,5 @@
 import { Controller, Get, HttpCode, HttpStatus } from '@nestjs/common';
-import { subFleetName } from 'src/subfleetname/schema/subfleetname.schema';
+import { subFleetName } from 'src/subfleet/schema/subfleetname.schema';
 import { GuestService } from './guest.service';
 
 @Controller('guest')
