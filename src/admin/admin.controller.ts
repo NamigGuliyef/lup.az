@@ -145,5 +145,12 @@ export class AdminController {
   }
 
 
+  @Post('/dashboard/user-confirmation')
+  @HttpCode(HttpStatus.OK)
+  async userConfirmation(id:string):Promise<messageResponse>{
+    return await this.adminService.userConfirmation(id)
+  }
+
+
 }
 
