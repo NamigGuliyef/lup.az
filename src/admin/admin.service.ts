@@ -12,14 +12,14 @@ import { CourierReport } from '../courier_report/model/report.schema';
 import { tokenRequestType } from '../middleware/tokenReqType';
 import {
   CreateNotificationCategoryDto,
-  UpdateNotificationCategoryDto
+  UpdateNotificationCategoryDto,
 } from '../notification-category/dto/notificationCategory.dto';
 import { NotificationCategory } from '../notification-category/model/notificationCategory.schema';
 import { CreateNotificationDto } from '../notification/dto/notification.dto';
 import { Notification } from '../notification/model/notification.schema';
 import {
   CreateSubFleetNameDto,
-  UpdateSubFleetNameDto
+  UpdateSubFleetNameDto,
 } from '../subfleet/dto/subfleetname.dto';
 import { subFleetName } from '../subfleet/schema/subfleetname.schema';
 import { User } from '../user/model/user.schema';
@@ -40,7 +40,7 @@ export class AdminService {
     private readonly courierReportModel: Model<CourierReport>,
     @InjectModel('courier_pay')
     private readonly courierPayModel: Model<CourierPay>,
-  ) { }
+  ) {}
 
   // sub fleet name create
   async createSubFleetName(
@@ -235,7 +235,10 @@ export class AdminService {
         'User payment information not found',
         HttpStatus.NOT_FOUND,
       );
-    return userSinglePayment.populate([{ path: 'myPaymentIds' }]);
+    return userSinglePayment.populate([
+      { path: 'myPaymentIds' },
+      { path: 'subFleetName', select: 'name' },
+    ]);
   }
 
   // user all payment
@@ -260,92 +263,189 @@ export class AdminService {
 
   // all admin support notifications
   async getAllSupportNotification(): Promise<Notification[]> {
-    return await this.notificationModel.find({ type: 'support' }).populate([{ path: 'category' }, { path: 'user' }]);
+    return await this.notificationModel
+      .find({ type: 'support' })
+      .populate([{ path: 'category' }, { path: 'user' }]);
   }
 
-
   // user update profile
-  async updateProfile(_id: string, updateUserDto: UpdateUserDto, files: { profilePhoto: Express.Multer.File[], idCard: Express.Multer.File[], driverLicensePhoto: Express.Multer.File[], carTechnicalPassportPhoto: Express.Multer.File[] }): Promise<messageResponse> {
-    const userExist = await this.userModel.findById(_id)
-    if (!userExist) throw new HttpException('User not found', HttpStatus.NOT_FOUND)
-    const userEmailBankCardWoltIdExist = await this.userModel.findOne({ courierPhone: updateUserDto.courierPhone, bankCardNumber: updateUserDto.bankCardNumber, woltId: updateUserDto.woltId })
-    if (userEmailBankCardWoltIdExist) throw new HttpException('User phone , bank card or wolt id already exists', HttpStatus.CONFLICT)
-    if ((files.profilePhoto && files.profilePhoto[0] && files.profilePhoto[0].path) || (files.idCard && files.idCard[0] && files.idCard[0].path) || (files.driverLicensePhoto && files.driverLicensePhoto[0] && files.driverLicensePhoto[0].path) || (files.carTechnicalPassportPhoto && files.carTechnicalPassportPhoto[0] && files.carTechnicalPassportPhoto[0].path)) {
-      let profilePhoto = []
-      let idCard = []
-      let driverLicensePhoto = []
-      let carTechnicalPassportPhoto = []
+  async updateProfile(
+    _id: string,
+    updateUserDto: UpdateUserDto,
+    files: {
+      profilePhoto: Express.Multer.File[];
+      idCard: Express.Multer.File[];
+      driverLicensePhoto: Express.Multer.File[];
+      carTechnicalPassportPhoto: Express.Multer.File[];
+    },
+  ): Promise<messageResponse> {
+    const userExist = await this.userModel.findById(_id);
+    if (!userExist)
+      throw new HttpException('User not found', HttpStatus.NOT_FOUND);
+    const userEmailBankCardWoltIdExist = await this.userModel.findOne({
+      courierPhone: updateUserDto.courierPhone,
+      bankCardNumber: updateUserDto.bankCardNumber,
+      woltId: updateUserDto.woltId,
+    });
+    if (userEmailBankCardWoltIdExist)
+      throw new HttpException(
+        'User phone , bank card or wolt id already exists',
+        HttpStatus.CONFLICT,
+      );
+    if (
+      (files.profilePhoto &&
+        files.profilePhoto[0] &&
+        files.profilePhoto[0].path) ||
+      (files.idCard && files.idCard[0] && files.idCard[0].path) ||
+      (files.driverLicensePhoto &&
+        files.driverLicensePhoto[0] &&
+        files.driverLicensePhoto[0].path) ||
+      (files.carTechnicalPassportPhoto &&
+        files.carTechnicalPassportPhoto[0] &&
+        files.carTechnicalPassportPhoto[0].path)
+    ) {
+      let profilePhoto = [];
+      let idCard = [];
+      let driverLicensePhoto = [];
+      let carTechnicalPassportPhoto = [];
       // eger profile photo varsa
-      if ((files.profilePhoto && files.profilePhoto[0] && files.profilePhoto[0].path)) {
+      if (
+        files.profilePhoto &&
+        files.profilePhoto[0] &&
+        files.profilePhoto[0].path
+      ) {
         for (let i = 0; i < files.profilePhoto.length; i++) {
-          const data = await cloudinary.uploader.upload(files.profilePhoto[i].path, { public_id: files.profilePhoto[i].originalname })
-          profilePhoto.push(data.url)
+          const data = await cloudinary.uploader.upload(
+            files.profilePhoto[i].path,
+            { public_id: files.profilePhoto[i].originalname },
+          );
+          profilePhoto.push(data.url);
         }
-        await this.userModel.findByIdAndUpdate(_id, { $set: { ...updateUserDto, profilePhoto } }, { new: true })
-        return { message: "User information has been changed" }
+        await this.userModel.findByIdAndUpdate(
+          _id,
+          { $set: { ...updateUserDto, profilePhoto } },
+          { new: true },
+        );
+        return { message: 'User information has been changed' };
       }
 
       // eger idCard photo varsa
-      if ((files.idCard && files.idCard[0] && files.idCard[0].path)) {
+      if (files.idCard && files.idCard[0] && files.idCard[0].path) {
         for (let i = 0; i < files.idCard.length; i++) {
-          const data = await cloudinary.uploader.upload(files.idCard[i].path, { public_id: files.idCard[i].originalname })
-          idCard.push(data.url)
+          const data = await cloudinary.uploader.upload(files.idCard[i].path, {
+            public_id: files.idCard[i].originalname,
+          });
+          idCard.push(data.url);
         }
-        await this.userModel.findByIdAndUpdate(_id, { $set: { ...updateUserDto, idCard } }, { new: true })
-        return { message: "User information has been changed" }
+        await this.userModel.findByIdAndUpdate(
+          _id,
+          { $set: { ...updateUserDto, idCard } },
+          { new: true },
+        );
+        return { message: 'User information has been changed' };
       }
       // eger driver license photo varsa
-      if ((files.driverLicensePhoto && files.driverLicensePhoto[0] && files.driverLicensePhoto[0].path)) {
+      if (
+        files.driverLicensePhoto &&
+        files.driverLicensePhoto[0] &&
+        files.driverLicensePhoto[0].path
+      ) {
         for (let i = 0; i < files.driverLicensePhoto.length; i++) {
-          const data = await cloudinary.uploader.upload(files.driverLicensePhoto[i].path, { public_id: files.driverLicensePhoto[i].originalname })
-          driverLicensePhoto.push(data.url)
+          const data = await cloudinary.uploader.upload(
+            files.driverLicensePhoto[i].path,
+            { public_id: files.driverLicensePhoto[i].originalname },
+          );
+          driverLicensePhoto.push(data.url);
         }
-        await this.userModel.findByIdAndUpdate(_id, { $set: { ...updateUserDto, driverLicensePhoto } }, { new: true })
-        return { message: "User information has been changed" }
+        await this.userModel.findByIdAndUpdate(
+          _id,
+          { $set: { ...updateUserDto, driverLicensePhoto } },
+          { new: true },
+        );
+        return { message: 'User information has been changed' };
       }
-      // eger car Technical Passport Photoo varsa 
-      if ((files.carTechnicalPassportPhoto && files.carTechnicalPassportPhoto[0] && files.carTechnicalPassportPhoto[0].path)) {
+      // eger car Technical Passport Photoo varsa
+      if (
+        files.carTechnicalPassportPhoto &&
+        files.carTechnicalPassportPhoto[0] &&
+        files.carTechnicalPassportPhoto[0].path
+      ) {
         for (let i = 0; i < files.carTechnicalPassportPhoto.length; i++) {
-          const data = await cloudinary.uploader.upload(files.carTechnicalPassportPhoto[i].path, { public_id: files.carTechnicalPassportPhoto[i].originalname })
-          carTechnicalPassportPhoto.push(data.url)
+          const data = await cloudinary.uploader.upload(
+            files.carTechnicalPassportPhoto[i].path,
+            { public_id: files.carTechnicalPassportPhoto[i].originalname },
+          );
+          carTechnicalPassportPhoto.push(data.url);
         }
-        await this.userModel.findByIdAndUpdate(_id, { $set: { ...updateUserDto, carTechnicalPassportPhoto } }, { new: true })
-        return { message: "User information has been changed" }
+        await this.userModel.findByIdAndUpdate(
+          _id,
+          { $set: { ...updateUserDto, carTechnicalPassportPhoto } },
+          { new: true },
+        );
+        return { message: 'User information has been changed' };
       } else {
-        await this.userModel.findByIdAndUpdate(_id, { $set: updateUserDto }, { new: true })
-        return { message: "User information has been changed" }
+        await this.userModel.findByIdAndUpdate(
+          _id,
+          { $set: updateUserDto },
+          { new: true },
+        );
+        return { message: 'User information has been changed' };
       }
-
     }
     // əgər parol dəyişir və ya dəyişmirsə
     if (updateUserDto.old_password) {
-      const passRight = await comparePassword(updateUserDto.old_password, userExist.password)
-      if (!passRight) throw new HttpException('Password is wrong', HttpStatus.UNAUTHORIZED)
-      const newHashPass = await hashPassword(updateUserDto.new_password)
-      await this.userModel.findByIdAndUpdate(_id, { $set: { password: newHashPass } }, { new: true })
-      return { message: "Your password has been changed" }
+      const passRight = await comparePassword(
+        updateUserDto.old_password,
+        userExist.password,
+      );
+      if (!passRight)
+        throw new HttpException('Password is wrong', HttpStatus.UNAUTHORIZED);
+      const newHashPass = await hashPassword(updateUserDto.new_password);
+      await this.userModel.findByIdAndUpdate(
+        _id,
+        { $set: { password: newHashPass } },
+        { new: true },
+      );
+      return { message: 'Your password has been changed' };
     } else {
-      await this.userModel.findByIdAndUpdate(_id, { $set: updateUserDto }, { new: true })
-      return { message: "Changed profile information" }
+      await this.userModel.findByIdAndUpdate(
+        _id,
+        { $set: updateUserDto },
+        { new: true },
+      );
+      return { message: 'Changed profile information' };
     }
   }
 
   // istifadəçi təsdiqi false => true
   async userConfirmation(id: string): Promise<messageResponse> {
-    const userActive = await this.userModel.findById(id)
+    const userActive = await this.userModel.findById(id);
     if (userActive.isActive === false) {
-      await this.userModel.findByIdAndUpdate(id, { $set: { isActive: true } }, { new: true }) // userActive-i true edildi
+      await this.userModel.findByIdAndUpdate(
+        id,
+        { $set: { isActive: true } },
+        { new: true },
+      ); // userActive-i true edildi
       // subfleet id-si user-in subfleet id si tapilir ve subfleet -in kuryerlerinin massivinin icerisine aktiv edilen user-in id-si elave edilir
-      await this.subFleetNameModel.findOneAndUpdate({ _id: userActive.subFleetName }, { $push: { courierIds: userActive._id } }, { new: true })
-      return { message: "User activated" }
+      await this.subFleetNameModel.findOneAndUpdate(
+        { _id: userActive.subFleetName },
+        { $push: { courierIds: userActive._id } },
+        { new: true },
+      );
+      return { message: 'User activated' };
     } else {
-      await this.userModel.findByIdAndUpdate(id, { $set: { isActive: false } }, { new: true }) // userActive-i true edildi
+      await this.userModel.findByIdAndUpdate(
+        id,
+        { $set: { isActive: false } },
+        { new: true },
+      ); // userActive-i true edildi
       // subfleet id-si user-in subfleet id si tapilir ve subfleet -in kuryerlerinin massivinin icerisine aktiv edilen user-in id-si elave edilir
-      await this.subFleetNameModel.findOneAndUpdate({ _id: userActive.subFleetName }, { $pull: { courierIds: userActive._id } }, { new: true })
-      return { message: "User deactivated" }
+      await this.subFleetNameModel.findOneAndUpdate(
+        { _id: userActive.subFleetName },
+        { $pull: { courierIds: userActive._id } },
+        { new: true },
+      );
+      return { message: 'User deactivated' };
     }
-
   }
-
-
 }
