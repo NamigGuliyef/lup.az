@@ -226,9 +226,9 @@ export class AdminService {
   }
 
   // single user payment
-  async getUserSinglePayment(woltId: string): Promise<User> {
+  async getUserSinglePayment(id: string): Promise<User> {
     const userSinglePayment = await this.userModel
-      .findOne({ woltId, role: 'user' })
+      .findOne({ _id: id, role: 'user' })
       .select('-password');
     if (!userSinglePayment)
       throw new HttpException(
