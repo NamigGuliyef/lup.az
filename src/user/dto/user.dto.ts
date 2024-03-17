@@ -53,6 +53,8 @@ export class CreateUserDto {
   @IsNotEmpty()
   @IsString()
   note: string;
+  @IsNotEmpty()
+  cash_order:string
 }
 
 
@@ -86,12 +88,14 @@ export class UpdateUserDto {
   @IsOptional()
   @Length(8, 16)
   new_password: string;
-
-
 }
 
 
-export class UpdateUserWoltIdDto {
+export class UpdateUserAdminPanelDto {
   @IsOptional()
   woltId: string
+  @IsOptional()
+  official: string
+  @IsOptional()
+  cash_order: string
 }

@@ -33,9 +33,9 @@ export class User {
   profilePhoto: string[];
   @Prop({ required: true })
   idCard: string[];
-  @Prop({ required: true })
+  @Prop()
   driverLicensePhoto: string[];
-  @Prop({ required: true })
+  @Prop()
   carTechnicalPassportPhoto: string[];
   @Prop({ required: true })
   bankCardNumber: string;
@@ -54,6 +54,8 @@ export class User {
   isActive: boolean
   @Prop({ default: "Xeyr", required: true })
   official: string
+  @Prop({ required: true })
+  cash_order: string
 }
 
 export const userModel = SchemaFactory.createForClass(User);

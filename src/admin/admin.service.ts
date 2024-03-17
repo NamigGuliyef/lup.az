@@ -5,21 +5,21 @@ import * as ExcelJS from 'exceljs';
 import { Model } from 'mongoose';
 import cloudinary from 'src/config/cloudinary';
 import { comparePassword, hashPassword } from 'src/helpers/hash_compare';
-import { UpdateUserDto, UpdateUserWoltIdDto } from 'src/user/dto/user.dto';
+import { UpdateUserAdminPanelDto, UpdateUserDto } from 'src/user/dto/user.dto';
 import { CourierPay } from '../courier_pay/model/pay.schema';
 import { UpdateReportStatusDto } from '../courier_report/dto/report.dto';
 import { CourierReport } from '../courier_report/model/report.schema';
 import { tokenRequestType } from '../middleware/tokenReqType';
 import {
   CreateNotificationCategoryDto,
-  UpdateNotificationCategoryDto,
+  UpdateNotificationCategoryDto
 } from '../notification-category/dto/notificationCategory.dto';
 import { NotificationCategory } from '../notification-category/model/notificationCategory.schema';
 import { CreateNotificationDto } from '../notification/dto/notification.dto';
 import { Notification } from '../notification/model/notification.schema';
 import {
   CreateSubFleetNameDto,
-  UpdateSubFleetNameDto,
+  UpdateSubFleetNameDto
 } from '../subfleet/dto/subfleetname.dto';
 import { subFleetName } from '../subfleet/schema/subfleetname.schema';
 import { User } from '../user/model/user.schema';
@@ -401,17 +401,20 @@ export class AdminService {
   }
 
 
-  // user-in woltId elave olunursa ve ya deyisirse
-  async userUpdateWoltId(_id: string, updateUserWoltIdDto: UpdateUserWoltIdDto): Promise<messageResponse> {
+  // user-in admin panelden deyisikliyi edilerse
+  async userUpdateAdminPanel(_id: string, updateUserAdminPanelDto: UpdateUserAdminPanelDto): Promise<messageResponse> {
     const userExist = await this.userModel.findById(_id);
     if (!userExist)
       throw new HttpException('User not found', HttpStatus.NOT_FOUND);
-    const userWoltIdExist = await this.userModel.findOne({ woltId: updateUserWoltIdDto.woltId });
-    if (userWoltIdExist) throw new HttpException('Wolt id already exists', HttpStatus.CONFLICT);
-    await this.userModel.findByIdAndUpdate(_id, { $set: { woltId: updateUserWoltIdDto.woltId } }, { new: true })
-    return { message: "User woltId updated" }
+    if (updateUserAdminPanelDto.woltId) {
+      const userWoltIdExist = await this.userModel.findOne({ woltId: updateUserAdminPanelDto.woltId });
+      if (userWoltIdExist) throw new HttpException('Wolt id already exists', HttpStatus.CONFLICT);
+      await this.userModel.findByIdAndUpdate(_id, { $set: { woltId: updateUserAdminPanelDto.woltId } }, { new: true })
+      return { message: "User woltId updated" }
+    }
+    await this.userModel.findByIdAndUpdate(_id, { $set: updateUserAdminPanelDto }, { new: true })
+    return { message: "User updated" }
   }
-
 
 
 
