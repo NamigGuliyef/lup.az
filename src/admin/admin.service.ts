@@ -406,8 +406,8 @@ export class AdminService {
     const userExist = await this.userModel.findById(_id);
     if (!userExist)
       throw new HttpException('User not found', HttpStatus.NOT_FOUND);
-    const userEmailBankCardWoltIdExist = await this.userModel.findOne({ woltId: updateUserWoltIdDto.woltId });
-    if (userEmailBankCardWoltIdExist) throw new HttpException('Wolt id already exists', HttpStatus.CONFLICT);
+    const userWoltIdExist = await this.userModel.findOne({ woltId: updateUserWoltIdDto.woltId });
+    if (userWoltIdExist) throw new HttpException('Wolt id already exists', HttpStatus.CONFLICT);
     await this.userModel.findByIdAndUpdate(_id, { $set: { woltId: updateUserWoltIdDto.woltId } }, { new: true })
     return { message: "User woltId updated" }
   }
