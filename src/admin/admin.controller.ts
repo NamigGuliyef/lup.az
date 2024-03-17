@@ -1,6 +1,6 @@
 import { Body, Controller, Get, HttpCode, HttpStatus, Param, Patch, Post, UploadedFile, UploadedFiles, UseInterceptors, UsePipes, ValidationPipe } from '@nestjs/common';
 import { FileFieldsInterceptor, FileInterceptor } from '@nestjs/platform-express';
-import { UpdateUserDto } from 'src/user/dto/user.dto';
+import { UpdateUserDto, UpdateUserWoltIdDto } from 'src/user/dto/user.dto';
 import { MulterOptions, MulterOptionsExcel } from '../config/multer';
 import { UpdateReportStatusDto } from '../courier_report/dto/report.dto';
 import { CreateNotificationCategoryDto, UpdateNotificationCategoryDto } from '../notification-category/dto/notificationCategory.dto';
@@ -145,9 +145,17 @@ export class AdminController {
   }
 
 
+  @Patch('/dashboard/user/profile-woltId/:_id')
+  @HttpCode(HttpStatus.OK)
+  @UsePipes(new ValidationPipe())
+  async userUpdateWoltId(@Param('_id') _id: string, @Body() updateUserWoltIdDto: UpdateUserWoltIdDto):Promise<messageResponse>{
+    return await this.adminService.userUpdateWoltId(_id,updateUserWoltIdDto)
+  }
+
+
   @Patch('/dashboard/user-confirmation/:id')
   @HttpCode(HttpStatus.OK)
-  async userConfirmation(@Param('id') id:string):Promise<messageResponse>{
+  async userConfirmation(@Param('id') id: string): Promise<messageResponse> {
     return await this.adminService.userConfirmation(id)
   }
 

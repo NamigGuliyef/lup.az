@@ -44,7 +44,7 @@ export class CreateUserDto {
   courierAccessories: string;
   @IsNotEmpty()
   @IsString()
-  @Length(16,16)
+  @Length(16, 16)
   bankCardNumber: string;
   @IsNotEmpty()
   @IsString()
@@ -57,35 +57,41 @@ export class CreateUserDto {
 
 
 export class UpdateUserDto {
-  // @IsOptional()
+  @IsOptional()
   woltId: string;
-  // @IsNotEmpty()
-  // @IsPhoneNumber('AZ')
-  // @IsMobilePhone('az-AZ')
-  // courierPhone: string;
-  // @IsNotEmpty()
-  // courierTerritory: string;
-  // @IsNotEmpty()
-  // courierVehicle: string;
-  // @IsNotEmpty()
-  // @IsString()
-  // carAdvertising: string;
-  // @IsNotEmpty()
-  // @IsString() 
-  // courierAccessories: string;
-  // @IsNotEmpty()
-  // @IsString()
-  // @Length(16,16)
-  // bankCardNumber: string;
-  // @IsNotEmpty()
-  // @IsString()
-  // note: string;
-  // @IsOptional()
-  // @Length(8, 16)
-  // old_password: string;
-  // @IsOptional()
-  // @Length(8, 16)
-  // new_password: string;
+  @IsNotEmpty()
+  @IsPhoneNumber('AZ')
+  @IsMobilePhone('az-AZ')
+  courierPhone: string;
+  @IsNotEmpty()
+  courierTerritory: string;
+  @IsNotEmpty()
+  courierVehicle: string;
+  @IsNotEmpty()
+  @IsString()
+  carAdvertising: string;
+  @IsNotEmpty()
+  @IsString()
+  courierAccessories: string;
+  @IsNotEmpty()
+  @IsString()
+  @Length(16, 16)
+  bankCardNumber: string;
+  @IsNotEmpty()
+  @IsString()
+  note: string;
+  @IsOptional()
+  @Length(8, 16)
+  old_password: string;
+  @IsOptional()
+  @Length(8, 16)
+  new_password: string;
 
-  
+
+}
+
+
+export class UpdateUserWoltIdDto {
+  @IsOptional()
+  woltId: string
 }
