@@ -207,11 +207,11 @@ export class AdminService {
           delivered_order: values[5],
           debt: values[6],
         };
-        const userPayment = await this.courierReportModel.create(rowData);
-        await this.userModel.findOneAndUpdate(
-          { woltId: userPayment.courierId },
-          { $push: { myPaymentIds: userPayment._id } },
-        );
+        const woltIdExist = await this.userModel.findOne({ woltId: values[2] })
+        if (woltIdExist) {
+          const userPayment = await this.courierReportModel.create(rowData);
+          await this.userModel.findOneAndUpdate({ woltId: userPayment.courierId }, { $push: { myPaymentIds: userPayment._id } });
+        }
       }
     });
     return { message: 'Added new information' };
