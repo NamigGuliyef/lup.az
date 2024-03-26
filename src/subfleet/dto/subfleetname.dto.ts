@@ -3,7 +3,7 @@ import { IsNotEmpty, IsString, Matches } from "class-validator";
 export class CreateSubFleetNameDto {
   @IsNotEmpty({ message: 'Name is empty' })
   @IsString()
-  @Matches(new RegExp("^[a-zA-Z]{3,20}$"))
+  @Matches(new RegExp("^[a-zA-Zşəıöğüç]{3,20}$"))
   name: string
 }
 
@@ -11,6 +11,6 @@ export class CreateSubFleetNameDto {
 export class UpdateSubFleetNameDto {
   @IsNotEmpty({ message: 'Name is empty' })
   @IsString()
-  @Matches(new RegExp("^[a-zA-Z]{3,20}$"))
+  @Matches(new RegExp("^[a-zA-Zşəıöğüç]{3,20}$"))
   name: string
 }
