@@ -154,18 +154,17 @@ export class AdminService {
   }
 
   // send notification
-  async sendNotification(
-    createNotificationDto: CreateNotificationDto,
-  ): Promise<messageResponse> {
-    const notification = await this.notificationModel.create({
-      ...createNotificationDto,
-      type: 'notification',
-    });
-    await this.userModel.updateMany(
-      { role: 'user' },
-      { $push: { notifications: notification._id } },
-    );
-    return { message: 'Notifications have been sent to couriers successfully' };
+  async sendNotification(createNotificationDto: CreateNotificationDto): Promise<messageResponse> {
+    if (createNotificationDto.user) {
+      const notificationUser = await this.notificationModel.create({ ...createNotificationDto, type: 'notification' })
+      await this.userModel.findOneAndUpdate({ role: 'user', _id: notificationUser.user }, { $push: { notifications: notificationUser._id } })
+      return { message: 'Notification have been sent to courier successfully' };
+    } else {
+      const notification = await this.notificationModel.create({ ...createNotificationDto, type: 'notification' });
+      await this.userModel.updateMany({ role: 'user' }, { $push: { notifications: notification._id } });
+      return { message: 'Notifications have been sent to couriers successfully' };
+    }
+
   }
 
   // all support message

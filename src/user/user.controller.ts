@@ -43,16 +43,23 @@ export class UserController {
 
   @Get('/profile/allNotifications')
   @HttpCode(HttpStatus.OK)
-  async getAllUserNotification():Promise<Notification[]>{
+  async getAllUserNotification(): Promise<Notification[]> {
     return await this.userService.getAllUserNotification()
   }
 
 
   @Get('/allNotificationCategory')
   @HttpCode(HttpStatus.OK)
-  async getAllNotificationCategory():Promise<NotificationCategory[]>{
+  async getAllNotificationCategory(): Promise<NotificationCategory[]> {
     return await this.userService.getAllNotificationCategory()
   }
 
 
+  // all support message
+  @Get('/profile/allSupportMessage')
+  @HttpCode(HttpStatus.OK)
+  async getUserAllSupportMessage(): Promise<Notification[]> {
+    return await this.userService.getUserAllSupportMessage()
+  }
+  
 }

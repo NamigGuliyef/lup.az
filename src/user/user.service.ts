@@ -49,4 +49,9 @@ export class UserService {
   }
 
 
+  // all support message
+  async getUserAllSupportMessage(): Promise<Notification[]> {
+    return await this.notificationModel.find({ type: "support", user: this.req.user._id })
+  }
+
 }
